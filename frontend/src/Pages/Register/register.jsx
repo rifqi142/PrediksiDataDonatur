@@ -9,7 +9,8 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 
 import "./register.css";
-import regillus from "../../Assets/register.png";
+import logo from "../../Assets/logo-dd.png";
+import logo2 from "../../Assets/logo-bl.png";
 
 const handleSubmit = (e) => {};
 
@@ -18,11 +19,16 @@ export default function register() {
     <section id="register-pages">
       <Container>
         <Row>
-          <Col md={6}>
-            <Card>
+          <Col>
+            <Card style={{ boxShadow: "10px 10px" }}>
               <Card.Body>
-                <Card.Title>Register Account</Card.Title>
+                <div className="logo">
+                  <img src={logo} alt="logo" className="img-fluid" />
+                  <br />
+                  <img src={logo2} alt="logo" className="img-fluid" />
+                </div>
                 <br />
+                <Card.Title>Register Account</Card.Title>
                 <Card.Subtitle>
                   Let's get you all set up so you can verify your personal
                   account and begin setting up your profile.
@@ -66,11 +72,6 @@ export default function register() {
                 </Form>
               </Card.Body>
             </Card>
-          </Col>
-          <Col md={6}>
-            <div className="illustration-register">
-              <img src={regillus} alt="logo" className="img-fluid" />
-            </div>
           </Col>
         </Row>
       </Container>

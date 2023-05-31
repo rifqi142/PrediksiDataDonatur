@@ -9,20 +9,27 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 
 import "./login.css";
-import logillus from "../../Assets/login.png";
+import logo from "../../Assets/logo-dd.png";
+import logo2 from "../../Assets/logo-bl.png";
 
 const handleSubmit = (e) => {};
 
 export default function login() {
   return (
     <section id="login-pages">
-      <Container>
+      <Container fluid>
         <Row>
-          <Col md={6}>
-            <Card>
+          <Col>
+            <Card style={{ boxShadow: "10px 10px" }}>
               <Card.Body>
-                <Card.Title>Welcome back</Card.Title>
+                <div className="logo">
+                  <img src={logo} alt="logo" className="img-fluid" />
+                  <br />
+                  <img src={logo2} alt="logo" className="img-fluid" />
+                </div>
                 <br />
+                <Card.Title>Welcome back</Card.Title>
+
                 <Card.Subtitle>
                   Login to your account to use all feature
                 </Card.Subtitle>
@@ -34,6 +41,7 @@ export default function login() {
                     <Form.Control
                       type="email"
                       placeholder="Enter your email ..."
+                      required
                     />
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -41,6 +49,7 @@ export default function login() {
                     <Form.Control
                       type="email"
                       placeholder="Enter your password ..."
+                      required
                     />
                   </Form.Group>
                   <Button variant="primary" type="submit" className="btn-login">
@@ -55,11 +64,6 @@ export default function login() {
                 </Form>
               </Card.Body>
             </Card>
-          </Col>
-          <Col md={6}>
-            <div className="illustration-login">
-              <img src={logillus} alt="logo" className="img-fluid" />
-            </div>
           </Col>
         </Row>
       </Container>
