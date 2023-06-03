@@ -1,0 +1,22 @@
+#about-pages {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  display: flex;
+  height: 100vh;
+}
+
+.right-content {
+  font-size: 1rem;
+}
+
+.sub-title {
+  font-size: 1rem;
+}
+.profile {
+  width: 30%;
+  margin-left: 35%;
+}
+
+.biodata {
+  text-align: center;
+}

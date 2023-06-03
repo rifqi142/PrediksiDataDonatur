@@ -45,8 +45,8 @@ const Sidebar = () => {
                   Evaluasi
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/tentang" activeClassName="activeClicked">
-                <CDBSidebarMenuItem icon="user">Tentang</CDBSidebarMenuItem>
+              <NavLink exact to="/about" activeClassName="activeClicked">
+                <CDBSidebarMenuItem icon="user">About</CDBSidebarMenuItem>
               </NavLink>
               <NavLink exact to="/logout" activeClassName="activeClicked">
                 <CDBSidebarMenuItem>
