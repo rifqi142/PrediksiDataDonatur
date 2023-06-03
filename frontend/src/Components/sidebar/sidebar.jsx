@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -19,7 +19,6 @@ const Sidebar = () => {
         style={{ display: "flex", height: "100vh", overflow: "scroll initial" }}
       >
         <CDBSidebar textColor="#fff" backgroundColor="#006D25">
-          {/* <CDBSidebarHeader> */}
           <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
             <a
               href="/home"
@@ -38,7 +37,7 @@ const Sidebar = () => {
               <NavLink exact to="/input-data" activeClassName="activeClicked">
                 <CDBSidebarMenuItem icon="table">Input Data</CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/profile" activeClassName="activeClicked">
+              <NavLink exact to="/proses" activeClassName="activeClicked">
                 <CDBSidebarMenuItem icon="chart-bar">Proses</CDBSidebarMenuItem>
               </NavLink>
               <NavLink exact to="/evanluasi" activeClassName="activeClicked">

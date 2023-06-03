@@ -1,0 +1,13 @@
+#proses-pages {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  display: flex;
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+.accordion-data {
+  width: 78rem;
+}

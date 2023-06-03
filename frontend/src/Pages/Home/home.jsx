@@ -12,7 +12,7 @@ export default function Home() {
       </div>
       <div className="right-content">
         <Card>
-          <Card.Img variant="top" className="banner" src={banner} />
+          <Card.Img variant="top" className="banner-app" src={banner} />
           <br />
           <Card.Body>
             <Card.Title>Home Pages</Card.Title>
