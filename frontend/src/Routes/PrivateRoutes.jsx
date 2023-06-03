@@ -10,8 +10,8 @@ export default function PrivateRoutes() {
     if (user.isLoggedIn) {
       navigate("/dashboard");
     } else {
-      alert("You are not logged in!");
       navigate("/");
+      alert("You are not logged in!");
     }
   });
 
