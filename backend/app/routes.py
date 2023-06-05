@@ -1,4 +1,4 @@
-from app import app, response
+from app import app
 from app.controller import userController
 from app.controller import dataController
 
