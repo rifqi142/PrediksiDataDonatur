@@ -1,5 +1,5 @@
 from app.model.user import User
-from app import response, app, db
+from app import response, db
 from flask import request
 
 def add_user():
@@ -42,3 +42,4 @@ def login():
         return response.success(data, 'Berhasil login')
     except Exception as e:
         print(e)
+
