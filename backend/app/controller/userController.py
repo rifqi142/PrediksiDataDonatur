@@ -21,7 +21,7 @@ def add_user():
 def singleTransform(data):
     data = {
         'id': data.id,
-        'username': data.name,
+        'username': data.username,
         'email': data.email,
     }
 
@@ -42,4 +42,4 @@ def login():
         return response.success(data, 'Berhasil login')
     except Exception as e:
         print(e)
-
+        return response.badRequest([], 'Internal server error')

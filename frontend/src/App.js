@@ -14,6 +14,7 @@ export default function App() {
       <Route path="/proses-data" element={<Proses />}></Route>
       <Route path="/about" element={<About />}></Route>
       <Route path="" element={<PrivateRoutes />}></Route>
+      <Route path="*" element={<div>Not Found</div>} />
     </Routes>
   );
 }

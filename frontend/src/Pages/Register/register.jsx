@@ -1,20 +1,46 @@
-import React, { useRef } from "react";
-import API from "../../api/Api";
-
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
+import React, { useState } from "react";
+// import API from "../../api/Api";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Button, Form, Container, Row, Col, Card } from "react-bootstrap";
 
 import "./register.css";
 import logo from "../../Assets/logo-dd.png";
 import logo2 from "../../Assets/logo-bl.png";
 
-const handleSubmit = (e) => {};
+export default function Register() {
+  const navigate = useNavigate();
 
-export default function register() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let res = await axios.post(
+        "http://127.0.0.1:5000/register",
+        {
+          username: username,
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (res.status === 200) {
+        console.log("Register Success");
+        navigate("/login");
+      }
+    } catch (err) {
+      alert(
+        "Username / Email Sudah terdaftar, Silahkan Periksa Data Anda Kembali!"
+      );
+    }
+  };
   return (
     <section id="register-pages">
       <Container>
@@ -36,28 +62,34 @@ export default function register() {
                 <hr />
                 <br />
                 <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      id="email"
-                      placeholder="Enter your email ..."
-                    />
-                  </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicUsername">
                     <Form.Label>Username</Form.Label>
-                    <Form.Control
+                    <input
                       type="text"
+                      className="form-control"
                       id="username"
-                      placeholder="Enter your username ..."
+                      name="username"
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="email"
+                      name="email"
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control
+                    <input
                       type="password"
+                      className="form-control"
                       id="password"
-                      placeholder="Enter your password ..."
+                      name="password"
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </Form.Group>
                   <Button variant="primary" type="submit" className="btn-login">

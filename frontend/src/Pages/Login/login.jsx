@@ -13,9 +13,8 @@ import logo from "../../Assets/logo-dd.png";
 import logo2 from "../../Assets/logo-bl.png";
 import backgorund from "../../Assets/bg-dd.jpeg";
 
-const handleSubmit = (e) => {};
-
 export default function login() {
+  const handleSubmit = (e) => {};
   return (
     <>
       {/* <img src={backgorund} alt="bg" className="bg" /> */}
@@ -50,7 +49,7 @@ export default function login() {
                     <Form.Group className="mb-3" controlId="formBasicPassword">
                       <Form.Label>Password</Form.Label>
                       <Form.Control
-                        type="email"
+                        type="password"
                         placeholder="Enter your password ..."
                         required
                       />
