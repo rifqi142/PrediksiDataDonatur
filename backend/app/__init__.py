@@ -6,7 +6,8 @@ from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
-# cors = CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
+CORS(app)
+
 
 app.config.from_object(Config)
 db = SQLAlchemy(app)

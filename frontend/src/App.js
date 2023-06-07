@@ -1,6 +1,14 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Login, Register, Home, InputData, Proses, About } from "./Pages";
+import {
+  Login,
+  Register,
+  Home,
+  InputData,
+  Proses,
+  About,
+  Health,
+} from "./Pages";
 
 import PrivateRoutes from "./Routes/PrivateRoutes";
 
@@ -13,6 +21,7 @@ export default function App() {
       <Route path="/input-data" element={<InputData />}></Route>
       <Route path="/proses-data" element={<Proses />}></Route>
       <Route path="/about" element={<About />}></Route>
+      <Route path="/health" element={<Health />}></Route>
       <Route path="" element={<PrivateRoutes />}></Route>
       <Route path="*" element={<div>Not Found</div>} />
     </Routes>

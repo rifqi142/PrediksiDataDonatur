@@ -1,6 +1,6 @@
 from app.model.user import User
 from app import response, db
-from flask import request
+from flask import request, jsonify
 
 def add_user():
     try:
@@ -13,10 +13,10 @@ def add_user():
         #inser to db
         db.session.add(user)
         db.session.commit()
-        
         return response.success('', 'Berhasil menambahkan data user!!')
     except Exception as e:
         print(e)
+        return response.badRequest([], 'Internal server error')
 
 def singleTransform(data):
     data = {
