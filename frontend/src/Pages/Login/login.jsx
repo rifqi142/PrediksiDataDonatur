@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect, useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../../store/Auth-Context";
+// import AuthContext from "../../store/Auth-Context";
 import { Button, Form, Container, Row, Col, Card } from "react-bootstrap";
 
 import "./login.css";
@@ -12,7 +12,7 @@ import logo2 from "../../Assets/logo-bl.png";
 // import backgorund from "../../Assets/bg-dd.jpeg";
 
 export default function Login() {
-  const { setAuth } = useContext(AuthContext);
+  // const { setAuth } = useContext(AuthContext);
   const errRef = useRef();
 
   const [email, setEmail] = useState("");
@@ -41,7 +41,7 @@ export default function Login() {
 
     try {
       let res = await axios.post(
-        "/register",
+        "",
         {
           email: enteredEmail,
           password: enteredPassword,
@@ -53,7 +53,7 @@ export default function Login() {
           withCredentials: true,
         }
       );
-      setAuth({ email, pwd });
+      // setAuth({ email, pwd });
       setEmail("");
       setPwd("");
       setSuccess(true);
@@ -62,7 +62,6 @@ export default function Login() {
         navigate("/home");
       }
     } catch (err) {
-      // alert("Email / Password Salah, Silahkan Periksa Data Anda Kembali!");
       if (!err?.response) {
         setErrMsg("Server is not responding");
       } else if (err.response?.status === 400) {
@@ -74,6 +73,7 @@ export default function Login() {
       } else {
         setErrMsg("Login Failed");
       }
+      console.log(err);
     }
   };
 

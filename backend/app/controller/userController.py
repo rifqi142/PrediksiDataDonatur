@@ -27,8 +27,8 @@ def singleTransform(data):
 
 def login():
     try:
-        email = request.form.get('email')
-        password = request.form.get('password')
+        email = request.json.get('email')
+        password = request.json.get('password')
         
         user = User.query.filter_by(email=email).first()
         
