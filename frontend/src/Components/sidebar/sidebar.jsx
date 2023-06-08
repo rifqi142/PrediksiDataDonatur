@@ -11,8 +11,11 @@ import { NavLink } from "react-router-dom";
 
 import { SlLogout } from "react-icons/sl";
 import "./sidebar.css";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
   return (
     <section id="sidebar-components">
       <div
@@ -31,26 +34,26 @@ const Sidebar = () => {
 
           <CDBSidebarContent className="sidebar-content">
             <CDBSidebarMenu>
-              <NavLink exact to="/home" activeClassName="activeClicked">
+              <NavLink exact to="/home">
                 <CDBSidebarMenuItem icon="home">Home</CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/input-data" activeClassName="activeClicked">
+              <NavLink exact to="/input-data">
                 <CDBSidebarMenuItem icon="table">Input Data</CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/proses-data" activeClassName="activeClicked">
+              <NavLink exact to="/proses-data">
                 <CDBSidebarMenuItem icon="chart-bar">
                   Proses Data
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/evanluasi" activeClassName="activeClicked">
+              <NavLink exact to="/evanluasi">
                 <CDBSidebarMenuItem icon="chart-line">
                   Evaluasi
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/about" activeClassName="activeClicked">
+              <NavLink exact to="/about">
                 <CDBSidebarMenuItem icon="user">About</CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/logout" activeClassName="activeClicked">
+              <NavLink exact to="/">
                 <CDBSidebarMenuItem>
                   <SlLogout />
                   &nbsp; &nbsp; &nbsp;Logout

@@ -4,9 +4,9 @@ from flask import request, jsonify
 
 def add_user():
     try:
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
+        username = request.json.get('username')
+        email = request.json.get('email')
+        password = request.json.get('password')
         
         user = User(username=username, email=email, password=password)
         user.setPassword(password)

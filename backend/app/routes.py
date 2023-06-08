@@ -18,11 +18,13 @@ def register():
     
 
 @app.route('/input-data', methods=['POST', 'GET'])
+@cross_origin(origin='http://localhost:3000', headers=['Content-Type', 'Authorization'])
 def input_data():
-    if request.method == 'POST':
-        return dataController.add_data()
-    else: 
-        return dataController.get_data()
+    return dataController.add_data()
+    # if request.method == 'POST':
+    #     return dataController.add_data()
+    #  else: 
+    #      return dataController.get_data()
 
 @app.route('/health' , methods=['GET'])
 @cross_origin(origin='http://localhost:3000', headers=['Content-Type', 'Authorization'])
