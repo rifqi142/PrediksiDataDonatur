@@ -1,21 +1,28 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import Sidebar from "../../Components/sidebar/sidebar";
 import { Card, Form, Button, Accordion, Table } from "react-bootstrap";
 import "./inputData.css";
 import axios from "axios";
-import { Data } from "./data";
+import { Data } from "./Data";
 import * as XLSX from "xlsx";
+import { useNavigate } from "react-router-dom";
 
 function InputData() {
+  const navigate = useNavigate();
   // on change states
   const [excelFile, setExcelFile] = useState(null);
   const [excelFileError, setExcelFileError] = useState(null);
 
   // submit
   const [excelData, setExcelData] = useState(null);
+  // it will contain array of objects
 
-  // handle file
-  const fileType = ["application/vnd.ms-excel"];
+  // handle File
+  const fileType = [
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "text/csv",
+  ];
   const handleFile = (e) => {
     let selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -28,7 +35,7 @@ function InputData() {
           setExcelFile(e.target.result);
         };
       } else {
-        setExcelFileError("Please select only csv file types");
+        setExcelFileError("Please select only excel file types");
         setExcelFile(null);
       }
     } else {
@@ -36,6 +43,7 @@ function InputData() {
     }
   };
 
+  // submit function
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (excelFile !== null) {
@@ -43,24 +51,27 @@ function InputData() {
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
+      setExcelData(data);
+      console.log(workbook);
+
       try {
-        let res = await axios.post("/input-data", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        });
-        setExcelData(data);
-        console.log(data);
-        if (res.status === 200) {
-          console.log("Input Data Success");
+        const response = await axios.post("/input-data", data);
+        console.log("Data successfully submitted:", response.data);
+        if (response.status === 200) {
+          navigate("/home");
+          console.log("Data successfully submitted");
         }
-      } catch (err) {
-        setExcelData(null);
-        console.log(err);
+        // Do something with the response if needed
+      } catch (error) {
+        console.error("Error submitting data:", error);
+        // Handle the error as needed
       }
+    } else {
+      setExcelData(null);
     }
+    console.log(excelData);
   };
+
   return (
     <section id="inputData-pages">
       <Sidebar />
@@ -76,7 +87,7 @@ function InputData() {
         <br />
         <Card className="card-content">
           <Card.Body>
-            <Form>
+            <Form onSubmit={handleSubmit} encType="multipart/form-data">
               <Form.Group controlId="formBasicData">
                 <h3>Input Data Donatur</h3>
                 <Form.Label>
@@ -84,9 +95,9 @@ function InputData() {
                 </Form.Label>
                 <input
                   className="form-control"
-                  type="file"
-                  id="formFile"
                   name="file"
+                  type="file"
+                  id="file"
                   // accept=".csv"
                   onChange={handleFile}
                   required
@@ -98,12 +109,7 @@ function InputData() {
                 )}
               </Form.Group>
               <br />
-              <Button
-                variant="primary"
-                type="submit"
-                className="btn-submit"
-                onSubmit={handleSubmit}
-              >
+              <Button variant="primary" type="submit" className="btn-submit">
                 Submit data
               </Button>
             </Form>
