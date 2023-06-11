@@ -26,7 +26,6 @@ function InputData() {
   const handleFile = (e) => {
     let selectedFile = e.target.files[0];
     if (selectedFile) {
-      // console.log(selectedFile.type);
       if (selectedFile && fileType.includes(selectedFile.type)) {
         let reader = new FileReader();
         reader.readAsArrayBuffer(selectedFile);
@@ -52,7 +51,6 @@ function InputData() {
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
       setExcelData(data);
-      console.log(workbook);
 
       try {
         const response = await axios.post("/input-data", data);
@@ -64,6 +62,7 @@ function InputData() {
         // Do something with the response if needed
       } catch (error) {
         console.error("Error submitting data:", error);
+        console.log(data);
         // Handle the error as needed
       }
     } else {
@@ -97,7 +96,7 @@ function InputData() {
                   className="form-control"
                   name="file"
                   type="file"
-                  id="file"
+                  id="formFile"
                   // accept=".csv"
                   onChange={handleFile}
                   required
@@ -128,7 +127,7 @@ function InputData() {
                     <thead>
                       <tr>
                         <th>No.</th>
-                        <th>Bulan</th>
+                        <th>Tanggal</th>
                         <th>Jenis Donasi</th>
                         <th>Jumlah Donasi</th>
                       </tr>

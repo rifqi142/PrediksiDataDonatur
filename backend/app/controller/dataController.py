@@ -17,7 +17,7 @@ def add_data():
         return response.success('', 'Berhasil menambahkan data')
     except Exception as e:
         print(e)
-        # return response.badRequest([], 'Internal server error: ' + str(e))
+        return response.badRequest([], 'Internal server error: ' + str(e))
 
 def get_data():
     try:
