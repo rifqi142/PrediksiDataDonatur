@@ -60,15 +60,12 @@ function InputData() {
             "Content-Type": "multipart/form-data",
           },
         });
-
         if (response.status === 200) {
           console.log("Data successfully submitted", response.data);
         }
-        // Do something with the response if needed
       } catch (error) {
         console.error("Error submitting data:", error);
         console.log(data);
-        // Handle the error as needed
       }
     } else {
       setExcelData(null);

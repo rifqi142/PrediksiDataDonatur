@@ -17,8 +17,14 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    alert("Anda telah logout");
-    navigate("/");
+    const logoutConfirmation = window.confirm(
+      "Apakah Anda yakin ingin logout?"
+    );
+
+    if (logoutConfirmation) {
+      alert("Anda telah logout");
+      navigate("/");
+    }
   };
 
   return (
