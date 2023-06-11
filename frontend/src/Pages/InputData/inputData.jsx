@@ -5,10 +5,8 @@ import "./inputData.css";
 import axios from "axios";
 import { Data } from "./Data";
 import * as XLSX from "xlsx";
-import { useNavigate } from "react-router-dom";
 
 function InputData() {
-  const navigate = useNavigate();
   // on change states
   const [excelFile, setExcelFile] = useState(null);
   const [excelFileError, setExcelFileError] = useState(null);
@@ -23,6 +21,7 @@ function InputData() {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "text/csv",
   ];
+
   const handleFile = (e) => {
     let selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -51,13 +50,19 @@ function InputData() {
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
       setExcelData(data);
-
       try {
-        const response = await axios.post("/input-data", data);
-        console.log("Data successfully submitted:", response.data);
+        const form = document.getElementById("form");
+        const formData = new FormData(form);
+        formData.append("file", excelFile);
+
+        const response = await axios.post("/input-data", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
         if (response.status === 200) {
-          navigate("/home");
-          console.log("Data successfully submitted");
+          console.log("Data successfully submitted", response.data);
         }
         // Do something with the response if needed
       } catch (error) {
@@ -68,7 +73,6 @@ function InputData() {
     } else {
       setExcelData(null);
     }
-    console.log(excelData);
   };
 
   return (
@@ -86,17 +90,17 @@ function InputData() {
         <br />
         <Card className="card-content">
           <Card.Body>
-            <Form onSubmit={handleSubmit} encType="multipart/form-data">
+            <Form id="form" onSubmit={handleSubmit}>
               <Form.Group controlId="formBasicData">
                 <h3>Input Data Donatur</h3>
                 <Form.Label>
                   Silahkan input data time series pada form berikut:
                 </Form.Label>
                 <input
-                  className="form-control"
                   name="file"
+                  className="form-control"
                   type="file"
-                  id="formFile"
+                  id="file"
                   // accept=".csv"
                   onChange={handleFile}
                   required

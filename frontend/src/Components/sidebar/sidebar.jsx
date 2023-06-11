@@ -16,6 +16,11 @@ import { useNavigate } from "react-router-dom";
 const Sidebar = () => {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    alert("Anda telah logout");
+    navigate("/");
+  };
+
   return (
     <section id="sidebar-components">
       <div
@@ -54,7 +59,7 @@ const Sidebar = () => {
                 <CDBSidebarMenuItem icon="user">About</CDBSidebarMenuItem>
               </NavLink>
               <NavLink exact to="/">
-                <CDBSidebarMenuItem>
+                <CDBSidebarMenuItem onClick={handleLogout}>
                   <SlLogout />
                   &nbsp; &nbsp; &nbsp;Logout
                 </CDBSidebarMenuItem>
