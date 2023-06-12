@@ -49,17 +49,41 @@ function InputData() {
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
-      setExcelData(data);
+
+      // date formatting
+      const newData = data.map((item) => {
+        const excelDateValue = item.tanggal;
+        let formattedDate = "";
+        if (!isNaN(excelDateValue)) {
+          const dateNumber = parseFloat(excelDateValue);
+          const excelEpoch = new Date(Date.UTC(1899, 11, 30));
+          const millisecondsPerDay = 24 * 60 * 60 * 1000;
+          const excelDate =
+            excelEpoch.getTime() + dateNumber * millisecondsPerDay;
+          const date = new Date(excelDate);
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          formattedDate = `${year}-${day}-${month}`;
+        }
+        return {
+          ...item,
+          tanggal: formattedDate,
+        };
+      });
+      console.log(newData);
+      setExcelData(newData);
+
       try {
         const form = document.getElementById("form");
         const formData = new FormData(form);
-        formData.append("file", excelFile);
-
+        formData.append("file", JSON.stringify(newData));
         const response = await axios.post("/input-data", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        console.log(response);
         if (response.status === 200) {
           console.log("Data successfully submitted", response.data);
         }
