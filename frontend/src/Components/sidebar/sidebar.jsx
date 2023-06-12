@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -12,8 +12,22 @@ import { NavLink } from "react-router-dom";
 import { SlLogout } from "react-icons/sl";
 import "./sidebar.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Sidebar = () => {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const res = await axios.get(`/1`);
+        setUser(res.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchUser();
+  }, []);
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -41,6 +55,7 @@ const Sidebar = () => {
             >
               Prediction LSTM
             </a>
+            <p style={{ textAlign: "center" }}>Welcome {user}</p>
           </CDBSidebarHeader>
 
           <CDBSidebarContent className="sidebar-content">

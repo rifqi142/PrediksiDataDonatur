@@ -5,6 +5,7 @@ import "./inputData.css";
 import axios from "axios";
 import { Data } from "./Data";
 import * as XLSX from "xlsx";
+import dayjs from "dayjs";
 
 function InputData() {
   // on change states
@@ -61,22 +62,16 @@ function InputData() {
           const excelDate =
             excelEpoch.getTime() + dateNumber * millisecondsPerDay;
           const date = new Date(excelDate);
-          const year = date.getFullYear();
-          const month = String(date.getMonth() + 1).padStart(2, "0");
-          const day = String(date.getDate()).padStart(2, "0");
-          formattedDate = `${year}-${month}-${day}`;
-        } else {
-          // Jika item.tanggal adalah string biasa, misalnya "2023-06-12"
-          const dateParts = item.tanggal.split("-"); // Pisahkan tahun, bulan, dan hari
-          const year = dateParts[0];
-          const month = dateParts[1];
-          const day = dateParts[2];
-          formattedDate = `${year}-${month}-${day}`;
+          formattedDate = dayjs(date).format("YYYY-MM-DD");
         }
-        console.log(typeof item.tanggal, formattedDate);
-        return { ...item, tanggal: formattedDate };
+        console.log(typeof formattedDate);
+
+        return {
+          ...item,
+          tanggal: formattedDate,
+        };
       });
-      console.log(newData);
+      console.log(typeof newData);
       setExcelData(newData);
 
       try {
@@ -88,7 +83,7 @@ function InputData() {
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log(response);
+        console.log(response.data);
         if (response.status === 200) {
           console.log("Data successfully submitted", response.data);
         }
