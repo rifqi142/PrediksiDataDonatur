@@ -1,7 +1,7 @@
 import io, csv, os, json
 # import pandas as pd
 from app.model.dataset import Dataset
-from app import response, db, uploadconfig
+from app import response, db
 from flask import request
 
 def add_data():

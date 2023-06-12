@@ -64,12 +64,17 @@ function InputData() {
           const year = date.getFullYear();
           const month = String(date.getMonth() + 1).padStart(2, "0");
           const day = String(date.getDate()).padStart(2, "0");
-          formattedDate = `${year}-${day}-${month}`;
+          formattedDate = `${year}-${month}-${day}`;
+        } else {
+          // Jika item.tanggal adalah string biasa, misalnya "2023-06-12"
+          const dateParts = item.tanggal.split("-"); // Pisahkan tahun, bulan, dan hari
+          const year = dateParts[0];
+          const month = dateParts[1];
+          const day = dateParts[2];
+          formattedDate = `${year}-${month}-${day}`;
         }
-        return {
-          ...item,
-          tanggal: formattedDate,
-        };
+        console.log(typeof item.tanggal, formattedDate);
+        return { ...item, tanggal: formattedDate };
       });
       console.log(newData);
       setExcelData(newData);
@@ -77,7 +82,7 @@ function InputData() {
       try {
         const form = document.getElementById("form");
         const formData = new FormData(form);
-        formData.append("file", JSON.stringify(newData));
+        formData.append("file", newData);
         const response = await axios.post("/input-data", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -148,7 +153,7 @@ function InputData() {
               {excelData === null && <>No File Selected</>}
               {excelData !== null && (
                 <Accordion.Body>
-                  <Table responsive="sm">
+                  <Table responsive="sm" id="table" className="table">
                     <thead>
                       <tr>
                         <th>No.</th>
