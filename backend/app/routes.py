@@ -15,6 +15,11 @@ cors = CORS(app)
 def login():
     return userController.login()
 
+@app.route('/<id>', methods=['GET'])
+@cross_origin(origin='http://localhost:3000', headers=['Content-Type', 'Authorization'])
+def get_user(id):
+    return userController.get_user(id)
+
 @app.route('/register', methods=['POST'])
 @cross_origin(origin='http://localhost:3000', headers=['Content-Type', 'Authorization'])
 def register():

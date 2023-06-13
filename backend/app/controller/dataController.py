@@ -1,4 +1,5 @@
-import io, csv, os, json
+import io, csv, os
+import datetime as dt
 # import pandas as pd
 from app.model.dataset import Dataset
 from app import response, db
@@ -11,7 +12,9 @@ def add_data():
         csv_data = csv.reader(load_data)
         next(csv_data)
         for row in csv_data:
-            val = Dataset(no=row[0], tanggal=row[1], jenis_donasi=row[2], jumlah_donasi=row[3])
+            tanggal = dt.datetime.strptime(row[1], "%d/%m/%Y").date()  # Convert to date object
+            iso_format = tanggal.isoformat()  # Convert to ISO format
+            val = Dataset(no=row[0], tanggal=iso_format, jenis_donasi=row[2], jumlah_donasi=row[3])
             db.session.add(val)
             db.session.commit()
         return response.success('', 'Berhasil menambahkan data')

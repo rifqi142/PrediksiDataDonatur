@@ -43,3 +43,18 @@ def login():
     except Exception as e:
         print(e)
         return response.badRequest([], 'Internal server error')
+
+def get_user(id):
+    try:
+        user = User.query.filter_by(id=id).first()
+        if not user:
+            return response.badRequest([], 'User tidak ditemukan')
+        
+        username = user.username
+        # data = singleTransform(user)
+        
+        return response.success(username, 'Berhasil mengambil data user')
+    except Exception as e:
+        print(e)
+        return response.badRequest([], 'Internal server error')
+
