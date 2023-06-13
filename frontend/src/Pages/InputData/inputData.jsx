@@ -62,9 +62,10 @@ function InputData() {
           const excelDate =
             excelEpoch.getTime() + dateNumber * millisecondsPerDay;
           const date = new Date(excelDate);
-          formattedDate = dayjs(date).format("YYYY-MM-DD");
+          formattedDate = dayjs(date).format("YYYY-DD-MM");
         }
         console.log(typeof formattedDate);
+        console.log(formattedDate);
 
         return {
           ...item,
@@ -72,6 +73,7 @@ function InputData() {
         };
       });
       console.log(typeof newData);
+      console.log(newData);
       setExcelData(newData);
 
       try {

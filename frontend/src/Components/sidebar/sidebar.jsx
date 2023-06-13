@@ -55,7 +55,7 @@ const Sidebar = () => {
             >
               Prediction LSTM
             </a>
-            <p style={{ textAlign: "center" }}>Welcome {user}</p>
+            <p style={{ textAlign: "center" }}>Welcome, {user}</p>
           </CDBSidebarHeader>
 
           <CDBSidebarContent className="sidebar-content">
