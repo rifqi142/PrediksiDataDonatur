@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Sidebar from "../../Components/sidebar/sidebar";
 import { Card, Form, Button, Accordion, Table } from "react-bootstrap";
 import "./inputData.css";
@@ -11,7 +11,9 @@ function InputData() {
   // on change states
   const [excelFile, setExcelFile] = useState(null);
   const [excelFileError, setExcelFileError] = useState(null);
+  const [judul, setJudul] = useState("");
 
+  const userJudul = useRef();
   // submit
   const [excelData, setExcelData] = useState(null);
   // it will contain array of objects
@@ -79,12 +81,15 @@ function InputData() {
       try {
         const form = document.getElementById("form");
         const formData = new FormData(form);
+        formData.append("judul", judul);
         formData.append("file", newData);
+
         const response = await axios.post("/input-data", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        setJudul("");
         console.log(response.data);
         if (response.status === 200) {
           console.log("Data successfully submitted", response.data);
@@ -114,6 +119,19 @@ function InputData() {
         <Card className="card-content">
           <Card.Body>
             <Form id="form" onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Judul Dataset</Form.Label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="judul"
+                  name="judul"
+                  ref={userJudul}
+                  onChange={(e) => setJudul(e.target.value)}
+                  value={judul}
+                  required
+                />
+              </Form.Group>
               <Form.Group controlId="formBasicData">
                 <h3>Input Data Donatur</h3>
                 <Form.Label>

@@ -1,6 +1,7 @@
 from app import app
 from app.controller import userController
 from app.controller import dataController
+from app.controller import masterController
 from flask_cors import CORS, cross_origin
 from flask import request, jsonify
 import io, csv
@@ -30,6 +31,11 @@ def register():
 @cross_origin(origin='http://localhost:3000', headers=['Content-Type', 'Authorization'])
 def input_data():
     return dataController.add_data()
+
+@app.route('/get-data', methods=['GET'])
+def get_data():
+    return masterController.get_data()
+
 
 @app.route('/health' , methods=['GET'])
 @cross_origin(origin='http://localhost:3000', headers=['Content-Type', 'Authorization'])

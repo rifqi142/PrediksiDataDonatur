@@ -68,7 +68,7 @@ const Sidebar = () => {
               </NavLink>
               <NavLink exact to="/proses-data">
                 <CDBSidebarMenuItem icon="chart-bar">
-                  Proses Data
+                  Proses LSTM
                 </CDBSidebarMenuItem>
               </NavLink>
               <NavLink exact to="/evanluasi">

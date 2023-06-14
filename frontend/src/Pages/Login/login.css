@@ -1,13 +1,17 @@
+.content {
+  background-image: url("../../Assets/bg-gradient.png");
+  /* background-color: rgb(55, 82, 238); */
+  background-size: contain;
+}
+
 #login-pages {
-  /* background-color: #ffffff; */
-  /* background-image: url("../../Assets/bg-dd.jpeg"); */
-  width: 35rem;
+  /* width: 35rem; */
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Poppins", sans-serif;
-  margin-left: 30rem;
+  /* margin-left: 40rem; */
 }
 
 #login-pages .logo {

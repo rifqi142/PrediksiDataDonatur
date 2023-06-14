@@ -79,93 +79,97 @@ export default function Login() {
 
   return (
     <>
-      {success ? (
-        <section>
-          <h1>You'are logged in</h1>
-          <br />
-          <p>
-            <a href="/home">Go to Home</a>
-          </p>
-        </section>
-      ) : (
-        <section id="login-pages">
-          {/* <div className="content"> */}
-          <Container fluid>
-            <Row>
-              <Col>
-                <Card style={{ boxShadow: "10px 10px" }}>
-                  <Card.Body>
-                    <div className="logo">
-                      <img src={logo} alt="logo" className="img-fluid" />
-                      <br />
-                      <img src={logo2} alt="logo" className="img-fluid" />
-                    </div>
-                    <br />
-                    <p
-                      ref={errRef}
-                      className={errMsg ? "errmsg text-danger" : "offscreen"}
-                      aria-live="assertive"
-                    >
-                      {errMsg}
-                    </p>
-                    <Card.Title>Welcome back</Card.Title>
-                    <Card.Subtitle>
-                      Login to your account to use all feature
-                    </Card.Subtitle>
-                    <hr />
-                    <br />
-                    <Form onSubmit={handleSubmit}>
-                      <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="email"
-                          name="email"
-                          ref={emailInputRef}
-                          onChange={(e) => setEmail(e.target.value)}
-                          value={email}
-                          required
-                        />
-                      </Form.Group>
-                      <Form.Group
-                        className="mb-3"
-                        controlId="formBasicPassword"
-                      >
-                        <Form.Label>Password</Form.Label>
-                        <input
-                          type="password"
-                          className="form-control"
-                          id="password"
-                          name="password"
-                          ref={passwordInputRef}
-                          onChange={(e) => setPwd(e.target.value)}
-                          value={pwd}
-                          required
-                        />
-                      </Form.Group>
-                      <Button
-                        variant="primary"
-                        type="submit"
-                        className="btn-login"
-                      >
-                        Login
-                      </Button>
-                      <div className="make-account mt-4">
-                        <span>Doesn't have an account ? </span>
-                        <a href="/register" className="text-decoration-none">
-                          SignUp Here
-                        </a>
+      <div className="content">
+        {success ? (
+          <section>
+            <h1>You'are logged in</h1>
+            <br />
+            <p>
+              <a href="/home">Go to Home</a>
+            </p>
+          </section>
+        ) : (
+          <section id="login-pages">
+            {/* <div className="content"> */}
+            <Container fluid>
+              <Row>
+                <Col></Col>
+                <Col>
+                  <Card style={{ boxShadow: "10px 10px" }}>
+                    <Card.Body>
+                      <div className="logo">
+                        <img src={logo} alt="logo" className="img-fluid" />
+                        <br />
+                        <img src={logo2} alt="logo" className="img-fluid" />
                       </div>
-                    </Form>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
-          {/* </div> */}
-        </section>
-      )}
+                      <br />
+                      <p
+                        ref={errRef}
+                        className={errMsg ? "errmsg text-danger" : "offscreen"}
+                        aria-live="assertive"
+                      >
+                        {errMsg}
+                      </p>
+                      <Card.Title>Welcome back</Card.Title>
+                      <Card.Subtitle>
+                        Login to your account to use all feature
+                      </Card.Subtitle>
+                      <hr />
+                      <br />
+                      <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                          <Form.Label>Email address</Form.Label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="email"
+                            name="email"
+                            ref={emailInputRef}
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                            required
+                          />
+                        </Form.Group>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="formBasicPassword"
+                        >
+                          <Form.Label>Password</Form.Label>
+                          <input
+                            type="password"
+                            className="form-control"
+                            id="password"
+                            name="password"
+                            ref={passwordInputRef}
+                            onChange={(e) => setPwd(e.target.value)}
+                            value={pwd}
+                            required
+                          />
+                        </Form.Group>
+                        <Button
+                          variant="primary"
+                          type="submit"
+                          className="btn-login"
+                        >
+                          Login
+                        </Button>
+                        <div className="make-account mt-4">
+                          <span>Doesn't have an account ? </span>
+                          <a href="/register" className="text-decoration-none">
+                            SignUp Here
+                          </a>
+                        </div>
+                      </Form>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col></Col>
+              </Row>
+            </Container>
+            {/* </div> */}
+          </section>
+        )}
+      </div>
     </>
   );
 }

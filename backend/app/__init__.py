@@ -14,6 +14,6 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 ## import model untuk ke database
-from app.model import user, dataset, hasil_prediksi
+from app.model import user, dataset, hasil_prediksi, master
 
 from app import routes

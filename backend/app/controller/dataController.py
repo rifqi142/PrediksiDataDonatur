@@ -1,12 +1,24 @@
-import io, csv, os
+import io, csv, os, uuid
 import datetime as dt
-# import pandas as pd
 from app.model.dataset import Dataset
+from app.model.master import Master
 from app import response, db
 from flask import request
 
 def add_data():
     try:
+        uid = uuid.uuid4()
+        ## get data master
+        judul = request.form['judul']
+        nama_dataset = "dataset-" + str(uid) + ".csv"
+        hasil = False;
+        master = Master(judul=judul, nama_dataset=nama_dataset, hasil=hasil)
+        db.session.add(master)
+        db.session.commit()
+        
+        get_nama = Master.query.filter_by(nama_dataset=nama_dataset).first()
+        
+        ## multi part form data and file
         file = request.files['file']
         load_data = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
         csv_data = csv.reader(load_data)
@@ -14,7 +26,7 @@ def add_data():
         for row in csv_data:
             tanggal = dt.datetime.strptime(row[1], "%d/%m/%Y").date()  # Convert to date object
             iso_format = tanggal.isoformat()  # Convert to ISO format
-            val = Dataset(no=row[0], tanggal=iso_format, jenis_donasi=row[2], jumlah_donasi=row[3])
+            val = Dataset(no=row[0], tanggal=iso_format, jenis_donasi=row[2], jumlah_donasi=row[3], id_master=get_nama.id)
             db.session.add(val)
             db.session.commit()
         return response.success('', 'Berhasil menambahkan data')
