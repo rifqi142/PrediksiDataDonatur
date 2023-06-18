@@ -4,6 +4,7 @@ import { Card, Form, Button, Accordion, Table } from "react-bootstrap";
 import "./inputData.css";
 import axios from "axios";
 import * as XLSX from "xlsx";
+import ReactPaginate from "react-paginate";
 
 function InputData() {
   // on change states
@@ -11,6 +12,8 @@ function InputData() {
   const [excelFileError, setExcelFileError] = useState(null);
   const [judul, setJudul] = useState("");
   const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 10;
 
   const userJudul = useRef();
   // submit
@@ -93,6 +96,16 @@ function InputData() {
     }
   };
 
+  // Paginate data
+  const offset = currentPage * itemsPerPage;
+  const currentData = data.slice(offset, offset + itemsPerPage);
+  const pageCount = Math.ceil(data.length / itemsPerPage);
+
+  // Handle page change
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
   return (
     <section id="inputData-pages">
       <Sidebar />
@@ -171,9 +184,9 @@ function InputData() {
                       </tr>
                     </thead>
                     <tbody>
-                      {data.map((item, index) => (
+                      {currentData.map((item, index) => (
                         <tr key={index}>
-                          <td>{index + 1}</td>
+                          <td>{index + 1 + offset}</td>
                           <td>{item.tahun}</td>
                           <td>{item.bulan}</td>
                           <td>{item.jenis_donasi}</td>
@@ -183,6 +196,25 @@ function InputData() {
                       ))}
                     </tbody>
                   </Table>
+                  <ReactPaginate
+                    breakLabel="..."
+                    nextLabel="next >"
+                    onPageChange={handlePageChange}
+                    pageRangeDisplayed={5}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    containerClassName="pagination"
+                    activeClassName="active"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakClassName="page-item"
+                    breakLinkClassName="page-link"
+                  />
                 </Accordion.Body>
               )}
             </Accordion.Item>
