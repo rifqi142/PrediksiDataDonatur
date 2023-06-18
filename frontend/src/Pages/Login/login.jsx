@@ -90,7 +90,6 @@ export default function Login() {
           </section>
         ) : (
           <section id="login-pages">
-            {/* <div className="content"> */}
             <Container fluid>
               <Row>
                 <Col></Col>
@@ -166,7 +165,6 @@ export default function Login() {
                 <Col></Col>
               </Row>
             </Container>
-            {/* </div> */}
           </section>
         )}
       </div>

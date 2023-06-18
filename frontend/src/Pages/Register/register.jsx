@@ -90,110 +90,114 @@ export default function Register() {
   };
   return (
     <>
-      {success ? (
-        <section>
-          <h1>Success</h1>
-          <p>
-            <a href="/">Login</a>
-          </p>
-        </section>
-      ) : (
-        <section id="register-pages">
-          <Container>
-            <Row>
-              <Col>
-                <Card style={{ boxShadow: "10px 10px" }}>
-                  <Card.Body>
-                    <div className="logo">
-                      <img src={logo} alt="logo" className="img-fluid" />
-                      <br />
-                      <img src={logo2} alt="logo" className="img-fluid" />
-                    </div>
-                    <br />
-                    <p
-                      ref={errRef}
-                      className={errMsg ? "errmsg text-danger" : "offscreen"}
-                      aria-live="assertive"
-                    >
-                      {errMsg}
-                    </p>
-                    <Card.Title>Register Account</Card.Title>
-                    <Card.Subtitle>
-                      Let's get you all set up so you can verify your personal
-                      account and begin setting up your profile.
-                    </Card.Subtitle>
-                    <hr />
-                    <br />
-                    <Form onSubmit={handleSubmit}>
-                      <Form.Group
-                        className="mb-3"
-                        controlId="formBasicUsername"
-                      >
-                        <Form.Label>Username</Form.Label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="username"
-                          name="username"
-                          ref={userRef}
-                          autoComplete="off"
-                          onChange={(e) => setUsername(e.target.value)}
-                          value={username}
-                          required
-                          aria-invalid={validName ? "false" : "true"}
-                        />
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="email"
-                          name="email"
-                          autoComplete="off"
-                          onChange={(e) => setEmail(e.target.value)}
-                          value={email}
-                          required
-                          aria-invalid={validEmail ? "false" : "true"}
-                        />
-                      </Form.Group>
-                      <Form.Group
-                        className="mb-3"
-                        controlId="formBasicPassword"
-                      >
-                        <Form.Label>Password</Form.Label>
-                        <input
-                          type="password"
-                          className="form-control"
-                          id="password"
-                          name="password"
-                          onChange={(e) => setPassword(e.target.value)}
-                          value={password}
-                          required
-                          aria-invalid={validPwd ? "false" : "true"}
-                        />
-                      </Form.Group>
-                      <Button
-                        variant="primary"
-                        type="submit"
-                        className="btn-login"
-                      >
-                        Register
-                      </Button>
-                      <div className="make-account mt-4">
-                        <span>Already have an account ? </span>
-                        <a href="/" className="text-decoration-none">
-                          Login Here
-                        </a>
+      <div className="content">
+        {success ? (
+          <section>
+            <h1>Success</h1>
+            <p>
+              <a href="/">Login</a>
+            </p>
+          </section>
+        ) : (
+          <section id="register-pages">
+            <Container fluid>
+              <Row>
+                <Col></Col>
+                <Col>
+                  <Card style={{ boxShadow: "10px 10px" }}>
+                    <Card.Body>
+                      <div className="logo">
+                        <img src={logo} alt="logo" className="img-fluid" />
+                        <br />
+                        <img src={logo2} alt="logo" className="img-fluid" />
                       </div>
-                    </Form>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
-        </section>
-      )}
+                      <br />
+                      <p
+                        ref={errRef}
+                        className={errMsg ? "errmsg text-danger" : "offscreen"}
+                        aria-live="assertive"
+                      >
+                        {errMsg}
+                      </p>
+                      <Card.Title>Register Account</Card.Title>
+                      <Card.Subtitle>
+                        Let's get you all set up so you can verify your personal
+                        account and begin setting up your profile.
+                      </Card.Subtitle>
+                      <hr />
+                      <br />
+                      <Form onSubmit={handleSubmit}>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="formBasicUsername"
+                        >
+                          <Form.Label>Username</Form.Label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="username"
+                            name="username"
+                            ref={userRef}
+                            autoComplete="off"
+                            onChange={(e) => setUsername(e.target.value)}
+                            value={username}
+                            required
+                            aria-invalid={validName ? "false" : "true"}
+                          />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                          <Form.Label>Email address</Form.Label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="email"
+                            name="email"
+                            autoComplete="off"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                            required
+                            aria-invalid={validEmail ? "false" : "true"}
+                          />
+                        </Form.Group>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="formBasicPassword"
+                        >
+                          <Form.Label>Password</Form.Label>
+                          <input
+                            type="password"
+                            className="form-control"
+                            id="password"
+                            name="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}
+                            required
+                            aria-invalid={validPwd ? "false" : "true"}
+                          />
+                        </Form.Group>
+                        <Button
+                          variant="primary"
+                          type="submit"
+                          className="btn-login"
+                        >
+                          Register
+                        </Button>
+                        <div className="make-account mt-4">
+                          <span>Already have an account ? </span>
+                          <a href="/" className="text-decoration-none">
+                            Login Here
+                          </a>
+                        </div>
+                      </Form>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col></Col>
+              </Row>
+            </Container>
+          </section>
+        )}
+      </div>
     </>
   );
 }

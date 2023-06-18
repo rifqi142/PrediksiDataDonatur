@@ -122,6 +122,7 @@ function InputData() {
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Judul Dataset</Form.Label>
                 <input
+                  placeholder="Masukan Judul Dataset"
                   type="text"
                   className="form-control"
                   id="judul"

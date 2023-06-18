@@ -1,17 +1,14 @@
 .content {
   background-image: url("../../Assets/bg-gradient.png");
-  /* background-color: rgb(55, 82, 238); */
   background-size: contain;
 }
 
 #login-pages {
-  /* width: 35rem; */
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Poppins", sans-serif;
-  /* margin-left: 40rem; */
 }
 
 #login-pages .logo {
@@ -27,8 +24,9 @@
   height: 40px;
   left: -1px;
   top: 72px;
-  background: #ffcc48;
+  background: #cbe1f3;
   color: #000;
   border-radius: 5px;
   border: 0px;
+  font-weight: 500;
 }

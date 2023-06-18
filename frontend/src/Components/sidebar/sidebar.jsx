@@ -71,10 +71,13 @@ const Sidebar = () => {
                   Proses LSTM
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/evanluasi">
+              <NavLink exact to="/evaluasi">
                 <CDBSidebarMenuItem icon="chart-line">
                   Evaluasi
                 </CDBSidebarMenuItem>
+              </NavLink>
+              <NavLink exact to="/history">
+                <CDBSidebarMenuItem icon="history">history</CDBSidebarMenuItem>
               </NavLink>
               <NavLink exact to="/about">
                 <CDBSidebarMenuItem icon="user">About</CDBSidebarMenuItem>
@@ -82,7 +85,7 @@ const Sidebar = () => {
               <NavLink exact to="/">
                 <CDBSidebarMenuItem onClick={handleLogout}>
                   <SlLogout />
-                  &nbsp; &nbsp; &nbsp;Logout
+                  &nbsp;&nbsp;&nbsp;Logout
                 </CDBSidebarMenuItem>
               </NavLink>
             </CDBSidebarMenu>
