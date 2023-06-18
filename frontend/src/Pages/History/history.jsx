@@ -10,7 +10,7 @@ export default function History() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(`/get-data`);
+        const res = await axios.get(`/get-data-master`);
         console.log(res.data.data);
         setData(res.data.data); // Assuming the fetched data is an array and stored in 'data'
       } catch (error) {
@@ -36,38 +36,50 @@ export default function History() {
           </Card.Body>
         </Card>
         <br />
-        <Row className="data-history">
-          {data.map((master) => (
-            <Col key={master.id} xs={5}>
-              <Card>
-                <Card.Body>
-                  <Card.Title className="judul-data">{master.judul}</Card.Title>
-                  <Card.Text>
-                    {master.nama_dataset}
-                    <br />
-                    {master.id !== null ? (
-                      <Button variant="primary" className="mt-2">
-                        Lihat Detail Data
+        {data.length === 0 ? (
+          <Card>
+            <Card.Body>
+              <Card.Text>
+                <h3>Tidak ada riwayat data pemrosesan.</h3>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        ) : (
+          <Row className="data-history">
+            {data.map((master) => (
+              <Col key={master.id} xs={5}>
+                <Card>
+                  <Card.Body>
+                    <Card.Title className="judul-data">
+                      {master.judul}
+                    </Card.Title>
+                    <Card.Text>
+                      {master.nama_dataset}
+                      <br />
+                      {master.id !== null ? (
+                        <Button variant="primary" className="mt-2">
+                          Lihat Detail Data
+                        </Button>
+                      ) : (
+                        <p></p>
+                      )}
+                      {master.hasil === 1 ? (
+                        <p></p>
+                      ) : (
+                        <Button variant="success" className="mt-2 ms-2">
+                          Lihat Hasil
+                        </Button>
+                      )}
+                      <Button variant="danger" className="mt-2 ms-2">
+                        Delete
                       </Button>
-                    ) : (
-                      <p></p>
-                    )}
-                    {master.hasil === 1 ? (
-                      <p></p>
-                    ) : (
-                      <Button variant="success" className="mt-2 ms-2">
-                        Lihat Hasil
-                      </Button>
-                    )}
-                    <Button variant="danger" className="mt-2 ms-2">
-                      Delete
-                    </Button>
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        )}
       </div>
     </section>
   );

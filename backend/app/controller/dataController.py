@@ -24,9 +24,7 @@ def add_data():
         csv_data = csv.reader(load_data)
         next(csv_data)
         for row in csv_data:
-            tanggal = dt.datetime.strptime(row[1], "%d/%m/%Y").date()  # Convert to date object
-            iso_format = tanggal.isoformat()  # Convert to ISO format
-            val = Dataset(no=row[0], tanggal=iso_format, jenis_donasi=row[2], jumlah_donasi=row[3], id_master=get_nama.id)
+            val = Dataset(tahun=row[0],bulan=row[1],jenis_donasi=row[2],jumlah_donasi=row[3], jumlah_data=row[4], id_master=get_nama.id)
             db.session.add(val)
             db.session.commit()
         return response.success('', 'Berhasil menambahkan data')
@@ -38,6 +36,9 @@ def get_data():
     try:
         dataset = Dataset.query.all()
         data = formatArray(dataset)
+        if not data:
+            return response.badRequest([], 'Data tidak ditemukan')
+        
         return response.success(data, 'Berhasil mengambil data')
     except Exception as e:
         print(e)
@@ -52,8 +53,11 @@ def formatArray(data):
 
 def singleTransform(data):
     data = {
-        'no': data.no,
-        'tanggal': data.tanggal,
+        'tahun': data.tahun,
+        'bulan': data.bulan,
         'jenis_donasi': data.jenis_donasi,
         'jumlah_donasi': data.jumlah_donasi,
+        'jumlah_data': data.jumlah_data,
+        'id_master': data.id_master,
     }
+    return data

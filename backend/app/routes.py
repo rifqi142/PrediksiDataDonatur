@@ -32,8 +32,12 @@ def register():
 def input_data():
     return dataController.add_data()
 
-@app.route('/get-data', methods=['GET'])
-def get_data():
+@app.route('/get-new-data', methods=['GET'])
+def get_new_data():
+    return dataController.get_data()
+
+@app.route('/get-data-master', methods=['GET'])
+def get_data_master():
     return masterController.get_data()
 
 

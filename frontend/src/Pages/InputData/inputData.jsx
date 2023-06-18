@@ -1,17 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Sidebar from "../../Components/sidebar/sidebar";
 import { Card, Form, Button, Accordion, Table } from "react-bootstrap";
 import "./inputData.css";
 import axios from "axios";
-import { Data } from "./Data";
 import * as XLSX from "xlsx";
-import dayjs from "dayjs";
 
 function InputData() {
   // on change states
   const [excelFile, setExcelFile] = useState(null);
   const [excelFileError, setExcelFileError] = useState(null);
   const [judul, setJudul] = useState("");
+  const [data, setData] = useState([]);
 
   const userJudul = useRef();
   // submit
@@ -24,6 +23,19 @@ function InputData() {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "text/csv",
   ];
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get(`/get-new-data`);
+        console.log(res.data.data);
+        setData(res.data.data); // Assuming the fetched data is an array and stored in 'data'
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
 
   const handleFile = (e) => {
     let selectedFile = e.target.files[0];
@@ -53,36 +65,14 @@ function InputData() {
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
 
-      // date formatting
-      const newData = data.map((item) => {
-        const excelDateValue = item.tanggal;
-        let formattedDate = "";
-        if (!isNaN(excelDateValue)) {
-          const dateNumber = parseFloat(excelDateValue);
-          const excelEpoch = new Date(Date.UTC(1899, 11, 30));
-          const millisecondsPerDay = 24 * 60 * 60 * 1000;
-          const excelDate =
-            excelEpoch.getTime() + dateNumber * millisecondsPerDay;
-          const date = new Date(excelDate);
-          formattedDate = dayjs(date).format("YYYY-DD-MM");
-        }
-        console.log(typeof formattedDate);
-        console.log(formattedDate);
-
-        return {
-          ...item,
-          tanggal: formattedDate,
-        };
-      });
-      console.log(typeof newData);
-      console.log(newData);
-      setExcelData(newData);
+      console.log(data);
+      setExcelData(data);
 
       try {
         const form = document.getElementById("form");
         const formData = new FormData(form);
         formData.append("judul", judul);
-        formData.append("file", newData);
+        formData.append("file", data);
 
         const response = await axios.post("/input-data", formData, {
           headers: {
@@ -166,20 +156,31 @@ function InputData() {
               <Accordion.Header className="accordion-head">
                 List Data
               </Accordion.Header>
-              {excelData === null && <>No File Selected</>}
-              {excelData !== null && (
+              {data === null && <>No File Selected</>}
+              {data !== null && (
                 <Accordion.Body>
                   <Table responsive="sm" id="table" className="table">
                     <thead>
                       <tr>
                         <th>No.</th>
-                        <th>Tanggal</th>
+                        <th>Tahun</th>
+                        <th>Bulan</th>
                         <th>Jenis Donasi</th>
                         <th>Jumlah Donasi</th>
+                        <th>Jumlah Data</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <Data excelData={excelData} />
+                      {data.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.tahun}</td>
+                          <td>{item.bulan}</td>
+                          <td>{item.jenis_donasi}</td>
+                          <td>{item.jumlah_donasi}</td>
+                          <td>{item.jumlah_data}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
                 </Accordion.Body>
