@@ -92,16 +92,22 @@ def get_last_data():
     
 def delete_data(id):
     try:
-        dataset = Dataset.query.filter_by(id_master=id)
-        master = Master.query.filter_by(id=id)
-        
-        if not dataset and master:
-            return response.badRequest([], 'Data tidak ditemukan')
-        
-        db.session.delete(dataset)
-        db.session.delete(master)
-        
+        dataset = Dataset.query.filter_by(id_master=id).first()
+        master = Master.query.filter_by(id=id).first()
+
+        if dataset is None and master is None:
+            return response.badRequest([], 'Data tidak ada')
+
+        if dataset is not None:
+            db.session.delete(dataset)
+
+        if master is not None:
+            db.session.delete(master)
+
+        db.session.commit()
+
         return response.success('', 'Berhasil menghapus data')
     except Exception as e:
         print(e)
         return response.badRequest([], 'Internal server error: ' + str(e))
+

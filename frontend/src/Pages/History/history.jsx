@@ -51,7 +51,7 @@ export default function History() {
   // Delete data
   const handleConfirmDelete = async () => {
     try {
-      const res = await axios.delete(`/delete-data-master/${selectedId}`);
+      const res = await axios.delete(`/delete-data/${selectedId}`);
       console.log(res);
       window.location.reload();
     } catch (error) {
