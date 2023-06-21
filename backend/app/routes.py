@@ -44,6 +44,10 @@ def get_last_data():
 def get_new_data_id(id):
     return dataController.get_data_id(id)
 
+@app.route('/delete-data/<id>', methods=['DELETE'])
+def delete_data(id):
+    return dataController.delete_data(id)
+
 @app.route('/get-data-master', methods=['GET'])
 def get_data_master():
     return masterController.get_data()

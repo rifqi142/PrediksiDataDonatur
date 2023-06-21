@@ -6,23 +6,27 @@ import "./history.css";
 
 export default function History() {
   const [data, setData] = useState([]);
-  const [newData, setNewData] = useState([]); // New state variable for the fetched new data
-
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+  const [newData, setNewData] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedData, setSelectedData] = useState(null);
 
-  // get riwayat
+  // Detail Modal
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const handleCloseDetailModal = () => setShowDetailModal(false);
+  const handleShowDetailModal = () => setShowDetailModal(true);
+
+  // Delete Modal
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleShowDeleteModal = () => setShowDeleteModal(true);
+
+  // Fetch data
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await axios.get(`/get-data-master`);
         console.log(res.data.data);
-        setData(res.data.data); // Assuming the fetched data is an array and stored in 'data'
+        setData(res.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -30,6 +34,7 @@ export default function History() {
     fetchData();
   }, []);
 
+  // Fetch new data
   useEffect(() => {
     async function fetchNewData() {
       try {
@@ -42,6 +47,24 @@ export default function History() {
     }
     fetchNewData();
   }, [selectedId]);
+
+  // Delete data
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await axios.delete(`/delete-data-master/${selectedId}`);
+      console.log(res);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+
+    // Close the delete modal
+    handleCloseDeleteModal();
+  };
+
+  const handleCancelDelete = () => {
+    handleCloseDeleteModal();
+  };
 
   return (
     <section id="history-pages">
@@ -80,7 +103,6 @@ export default function History() {
                     <Card.Text>
                       {master.nama_dataset}
                       <br />
-
                       {master.id !== null ? (
                         <>
                           <Button
@@ -89,14 +111,14 @@ export default function History() {
                             onClick={() => {
                               setSelectedId(master.id);
                               setSelectedData(master);
-                              handleShow();
+                              handleShowDetailModal();
                             }}
                           >
                             Lihat Detail Data
                           </Button>
                           <Modal
-                            show={show}
-                            onHide={handleClose}
+                            show={showDetailModal}
+                            onHide={handleCloseDetailModal}
                             className="modal-xl"
                             centered
                           >
@@ -136,7 +158,10 @@ export default function History() {
                               </Table>
                             </Modal.Body>
                             <Modal.Footer>
-                              <Button variant="secondary" onClick={handleClose}>
+                              <Button
+                                variant="secondary"
+                                onClick={handleCloseDetailModal}
+                              >
                                 Close
                               </Button>
                             </Modal.Footer>
@@ -152,9 +177,44 @@ export default function History() {
                           Lihat Hasil
                         </Button>
                       )}
-                      <Button variant="danger" className="mt-2 ms-2">
-                        Delete
-                      </Button>
+                      <>
+                        <Button
+                          variant="danger"
+                          className="mt-2 ms-2"
+                          onClick={() => {
+                            setSelectedId(master.id);
+                            handleShowDeleteModal();
+                          }}
+                        >
+                          Delete
+                        </Button>
+                        <Modal
+                          show={showDeleteModal}
+                          onHide={handleCloseDeleteModal}
+                          centered
+                        >
+                          <Modal.Header closeButton>
+                            <Modal.Title>Confirm Delete</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            Are you sure you want to delete the data?
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button
+                              variant="secondary"
+                              onClick={handleCancelDelete}
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              variant="danger"
+                              onClick={handleConfirmDelete}
+                            >
+                              Delete
+                            </Button>
+                          </Modal.Footer>
+                        </Modal>
+                      </>
                     </Card.Text>
                   </Card.Body>
                 </Card>

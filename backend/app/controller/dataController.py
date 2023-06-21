@@ -89,3 +89,19 @@ def get_last_data():
     except Exception as e:
         print(e)
         return response.badRequest([], 'Internal server error: ' + str(e))
+    
+def delete_data(id):
+    try:
+        dataset = Dataset.query.filter_by(id_master=id)
+        master = Master.query.filter_by(id=id)
+        
+        if not dataset and master:
+            return response.badRequest([], 'Data tidak ditemukan')
+        
+        db.session.delete(dataset)
+        db.session.delete(master)
+        
+        return response.success('', 'Berhasil menghapus data')
+    except Exception as e:
+        print(e)
+        return response.badRequest([], 'Internal server error: ' + str(e))
