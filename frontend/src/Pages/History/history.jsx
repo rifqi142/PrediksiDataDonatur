@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../Components/sidebar/sidebar";
 import axios from "axios";
-import { Card, Button, Row, Col } from "react-bootstrap";
+import { Card, Button, Row, Col, Modal, Table } from "react-bootstrap";
 import "./history.css";
 
 export default function History() {
   const [data, setData] = useState([]);
+  const [newData, setNewData] = useState([]); // New state variable for the fetched new data
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [selectedId, setSelectedId] = useState(null);
+  const [selectedData, setSelectedData] = useState(null);
+
+  // get riwayat
   useEffect(() => {
     async function fetchData() {
       try {
@@ -19,6 +29,20 @@ export default function History() {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    async function fetchNewData() {
+      try {
+        const res = await axios.get(`/get-new-data/${selectedId}`);
+        console.log(res.data.data);
+        setNewData(res.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchNewData();
+  }, [selectedId]);
+
   return (
     <section id="history-pages">
       <div className="left-content">
@@ -56,10 +80,68 @@ export default function History() {
                     <Card.Text>
                       {master.nama_dataset}
                       <br />
+
                       {master.id !== null ? (
-                        <Button variant="primary" className="mt-2">
-                          Lihat Detail Data
-                        </Button>
+                        <>
+                          <Button
+                            variant="primary"
+                            className="mt-2"
+                            onClick={() => {
+                              setSelectedId(master.id);
+                              setSelectedData(master);
+                              handleShow();
+                            }}
+                          >
+                            Lihat Detail Data
+                          </Button>
+                          <Modal
+                            show={show}
+                            onHide={handleClose}
+                            className="modal-xl"
+                            centered
+                          >
+                            <Modal.Header closeButton>
+                              <Modal.Title>
+                                Lihat data {selectedData && selectedData.judul}
+                              </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body className="modal-body-scroll">
+                              <Table
+                                responsive="sm"
+                                id="table"
+                                className="table"
+                              >
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Tahun</th>
+                                    <th>Bulan</th>
+                                    <th>Jenis Donasi</th>
+                                    <th>Jumlah Donasi</th>
+                                    <th>Jumlah Data</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {newData.map((item, index) => (
+                                    <tr key={index}>
+                                      <td>{index + 1}</td>
+                                      <td>{item.tahun}</td>
+                                      <td>{item.bulan}</td>
+                                      <td>{item.jenis_donasi}</td>
+                                      <td>{item.jumlah_donasi}</td>
+                                      <td>{item.jumlah_data}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </Table>
+                            </Modal.Body>
+                            <Modal.Footer>
+                              <Button variant="secondary" onClick={handleClose}>
+                                Close
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
+                        </>
                       ) : (
                         <p></p>
                       )}

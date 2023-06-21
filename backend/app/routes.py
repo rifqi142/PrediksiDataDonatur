@@ -36,13 +36,17 @@ def input_data():
 def get_new_data():
     return dataController.get_data()
 
+@app.route('/get-last-data', methods=['GET'])
+def get_last_data():
+    return dataController.get_last_data()
+
+@app.route('/get-new-data/<id>', methods=['GET'])
+def get_new_data_id(id):
+    return dataController.get_data_id(id)
+
 @app.route('/get-data-master', methods=['GET'])
 def get_data_master():
     return masterController.get_data()
 
 
-@app.route('/health' , methods=['GET'])
-@cross_origin(origin='http://localhost:3000', headers=['Content-Type', 'Authorization'])
-def health():
-    return 'Health is ok'
 

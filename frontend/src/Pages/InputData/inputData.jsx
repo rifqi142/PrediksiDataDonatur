@@ -30,9 +30,9 @@ function InputData() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(`/get-new-data`);
+        const res = await axios.get("/get-last-data"); // Ganti URL dan endpoint API sesuai kebutuhan
         console.log(res.data.data);
-        setData(res.data.data); // Assuming the fetched data is an array and stored in 'data'
+        setData(res.data.data);
       } catch (error) {
         console.log(error);
       }

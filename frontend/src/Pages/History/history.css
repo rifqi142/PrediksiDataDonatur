@@ -21,3 +21,11 @@
 .data-history .judul-data {
   font-weight: bold;
 }
+
+.modal {
+  align-items: center;
+}
+.modal-body-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+}

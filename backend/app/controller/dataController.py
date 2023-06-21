@@ -4,6 +4,8 @@ from app.model.dataset import Dataset
 from app.model.master import Master
 from app import response, db
 from flask import request
+from sqlalchemy import desc
+
 
 def add_data():
     try:
@@ -61,3 +63,29 @@ def singleTransform(data):
         'id_master': data.id_master,
     }
     return data
+
+def get_data_id(id):
+    try:
+        dataset = Dataset.query.filter_by(id_master=id).all()
+        data = formatArray(dataset)
+        
+        if not data:
+            return response.badRequest([], 'Data tidak ditemukan')
+        
+        return response.success(data, 'Berhasil mengambil data')
+    except Exception as e:
+        print(e)
+        
+def get_last_data():
+    try:
+        dataset = Dataset.query.order_by(desc(Dataset.id)).limit(1).all()
+        
+        if not dataset:
+            return response.badRequest([], 'Data tidak ditemukan')
+        
+        datalast = Dataset.query.filter_by(id_master=dataset[0].id_master).all()
+        data = formatArray(datalast)
+        return response.success(data, 'Berhasil mengambil data')
+    except Exception as e:
+        print(e)
+        return response.badRequest([], 'Internal server error: ' + str(e))
