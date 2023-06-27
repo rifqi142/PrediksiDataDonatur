@@ -71,11 +71,6 @@ const Sidebar = () => {
                   Proses LSTM
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/evaluasi">
-                <CDBSidebarMenuItem icon="chart-line">
-                  Evaluasi
-                </CDBSidebarMenuItem>
-              </NavLink>
               <NavLink exact to="/history">
                 <CDBSidebarMenuItem icon="history">history</CDBSidebarMenuItem>
               </NavLink>

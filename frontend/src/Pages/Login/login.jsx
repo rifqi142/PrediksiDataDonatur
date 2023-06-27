@@ -54,6 +54,7 @@ export default function Login() {
         }
       );
       // setAuth({ email, pwd });
+      console.log(res);
       setEmail("");
       setPwd("");
       setSuccess(true);

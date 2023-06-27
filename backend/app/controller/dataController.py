@@ -6,7 +6,7 @@ from app import response, db
 from flask import request
 from sqlalchemy import desc
 
-
+# input data ke database
 def add_data():
     try:
         uid = uuid.uuid4()
@@ -64,6 +64,7 @@ def singleTransform(data):
     }
     return data
 
+## get data by id untuk history pages
 def get_data_id(id):
     try:
         dataset = Dataset.query.filter_by(id_master=id).all()
@@ -75,7 +76,8 @@ def get_data_id(id):
         return response.success(data, 'Berhasil mengambil data')
     except Exception as e:
         print(e)
-        
+
+# get data by id untuk input pages
 def get_last_data():
     try:
         dataset = Dataset.query.order_by(desc(Dataset.id)).limit(1).all()
@@ -89,7 +91,8 @@ def get_last_data():
     except Exception as e:
         print(e)
         return response.badRequest([], 'Internal server error: ' + str(e))
-    
+
+# hapus data by id untuk history pages
 def delete_data(id):
     try:
         dataset = Dataset.query.filter_by(id_master=id).first()

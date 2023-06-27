@@ -94,7 +94,7 @@ export default function History() {
         ) : (
           <Row className="data-history">
             {data.map((master) => (
-              <Col key={master.id} xs={5}>
+              <Col key={master.id} xs={6}>
                 <Card>
                   <Card.Body>
                     <Card.Title className="judul-data">
