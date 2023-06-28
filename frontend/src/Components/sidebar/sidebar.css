@@ -1,4 +1,8 @@
 #sidebar-component {
   font-family: "Poppins", sans-serif;
-  height: max-content;
+}
+
+.sidebar-content {
+  flex: 1;
+  grid-area: content;
 }

@@ -119,7 +119,7 @@ export default function History() {
                           <Modal
                             show={showDetailModal}
                             onHide={handleCloseDetailModal}
-                            className="modal-xl"
+                            size="xl"
                             centered
                           >
                             <Modal.Header closeButton>

@@ -2,10 +2,8 @@ from app import app
 from app.controller import userController, predictController, dataController, masterController
 from flask_cors import CORS, cross_origin
 from flask import request, jsonify
-import io, csv
 # import pandas as pd
 from app.model.dataset import Dataset
-from app import response, db
 
 cors = CORS(app)
 
@@ -50,11 +48,8 @@ def delete_data(id):
 def get_data_master():
     return masterController.get_data()
 
-## proses algoritma
 @app.route('/proses-predict', methods=['POST'])
-def proses():
+def proses_predict():
     return predictController.proses_predict()
 
-# @app.route('/proses-JumData', methods=['POST'])
-# def proses():
-#     return predictController.proses_JumData()
+

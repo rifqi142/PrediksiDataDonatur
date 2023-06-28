@@ -44,9 +44,13 @@ const Sidebar = () => {
   return (
     <section id="sidebar-components">
       <div
-        style={{ display: "flex", height: "100vh", overflow: "scroll initial" }}
+        style={{ display: "grid", gridTemplateColumns: "1fr", height: "100vh" }}
       >
-        <CDBSidebar textColor="#fff" backgroundColor="#006D25">
+        <CDBSidebar
+          textColor="#fff"
+          backgroundColor="#006D25"
+          style={{ overflow: "auto" }}
+        >
           <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
             <a
               href="/home"
