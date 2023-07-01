@@ -8,13 +8,21 @@ import {
   CDBSidebarMenuItem,
 } from "cdbreact";
 import { NavLink } from "react-router-dom";
-
+import { Button, Modal } from "react-bootstrap";
 import { SlLogout } from "react-icons/sl";
 import "./sidebar.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Sidebar = () => {
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const toggleLogoutModal = () => {
+    setIsLogoutModalOpen(!isLogoutModalOpen);
+  };
+  const handleLogout = () => {
+    navigate("/");
+  };
   const [user, setUser] = useState(null);
   useEffect(() => {
     async function fetchUser() {
@@ -30,16 +38,16 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    const logoutConfirmation = window.confirm(
-      "Apakah Anda yakin ingin logout?"
-    );
+  // const handleLogout = () => {
+  //   const logoutConfirmation = window.confirm(
+  //     "Apakah Anda yakin ingin logout?"
+  //   );
 
-    if (logoutConfirmation) {
-      alert("Anda telah logout");
-      navigate("/");
-    }
-  };
+  //   if (logoutConfirmation) {
+  //     alert("Anda telah logout");
+  //     navigate("/");
+  //   }
+  // };
 
   return (
     <section id="sidebar-components">
@@ -57,7 +65,7 @@ const Sidebar = () => {
               className="text-decoration-none"
               style={{ color: "inherit" }}
             >
-              Prediction LSTM
+              Prediction Data
             </a>
             <p style={{ textAlign: "center" }}>Welcome, {user}</p>
           </CDBSidebarHeader>
@@ -72,7 +80,7 @@ const Sidebar = () => {
               </NavLink>
               <NavLink exact to="/proses-data">
                 <CDBSidebarMenuItem icon="chart-bar">
-                  Proses LSTM
+                  Proses Data
                 </CDBSidebarMenuItem>
               </NavLink>
               <NavLink exact to="/history">
@@ -81,12 +89,30 @@ const Sidebar = () => {
               <NavLink exact to="/about">
                 <CDBSidebarMenuItem icon="user">About</CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/">
-                <CDBSidebarMenuItem onClick={handleLogout}>
+              {/* <Button variant="primary" onClick={toggleLogoutModal}>
+                <SlLogout />
+                &nbsp;&nbsp;&nbsp;Logout
+              </Button> */}
+              <NavLink exact to="#" onClick={toggleLogoutModal}>
+                <CDBSidebarMenuItem>
                   <SlLogout />
-                  &nbsp;&nbsp;&nbsp;Logout
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logout
                 </CDBSidebarMenuItem>
               </NavLink>
+              <Modal show={isLogoutModalOpen} onHide={toggleLogoutModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Konfirmasi Logout</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Apakah Anda yakin ingin keluar?</Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={toggleLogoutModal}>
+                    Tidak
+                  </Button>
+                  <Button variant="primary" onClick={handleLogout}>
+                    Ya
+                  </Button>
+                </Modal.Footer>
+              </Modal>
             </CDBSidebarMenu>
           </CDBSidebarContent>
 
@@ -96,7 +122,7 @@ const Sidebar = () => {
                 padding: "20px 5px",
               }}
             >
-              Dompet Dhuafa LSTM
+              Dompet Dhuafa Random Forest
             </div>
           </CDBSidebarFooter>
         </CDBSidebar>

@@ -16,7 +16,7 @@ export default function About() {
             <Card.Text className="sub-title">
               Website ini merupakan website sederhana yang betujuan untuk
               memprediksi data donatur melalui data time series menggunakan
-              algoritma Long Short-Term Memory
+              metode Random Forest
             </Card.Text>
             <hr />
             <Card.Img variant="top" className="profile" src={profile} />
