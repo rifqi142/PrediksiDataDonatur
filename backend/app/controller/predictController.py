@@ -10,6 +10,7 @@ from app import response, db
 from flask import request
 from sqlalchemy import desc
 from sklearn.preprocessing import OneHotEncoder
+import json
 
 def formatArray(data):
     array = []
@@ -51,8 +52,9 @@ def proses_predict():
         print(pilihan)
         # Jika value 1 maka proses prediksi jumlah donasi
         if pilihan == '1':
-            # Melakukan one-hot encoding pada kolom "jenis_donasi"
-            dataset_encoded = pd.get_dummies(data, columns=['jenis_donasi'])
+            # Melakukan one-hot encoding pada kolom "Jenis"
+            dataset_encoded = pd.get_dummies(dataset, columns=['Jenis'])
+            print(dataset_encoded)
             
             # Memisahkan fitur dan target
             X = dataset_encoded.drop(['tahun', 'bulan', 'jumlah_donasi'], axis=1)
@@ -86,15 +88,17 @@ def proses_predict():
                 }
                 hasil_prediksi.append(prediksi)
 
+            prediksi_json = json.dumps(prediksi)
+
             for prediksi in hasil_prediksi:
                 hasil_prediksi_obj = Hasil_prediksi(
-                    tahun=prediksi['tahun'],
-                    bulan=prediksi['bulan'],
-                    jenis_donasi=prediksi['jenis_donasi'],
-                    prediksi_donasi=prediksi['prediksi'],
-                    ekspektasi_donasi=prediksi['ekspektasi'],
-                    mape=prediksi['mape'],
-                    id_master=prediksi['id_master']
+                    tahun=prediksi_json['tahun'],
+                    bulan=prediksi_json['bulan'],
+                    jenis_donasi=prediksi_json['jenis_donasi'],
+                    prediksi_donasi=prediksi_json['prediksi'],
+                    ekspektasi_donasi=prediksi_json['ekspektasi'],
+                    mape=prediksi_json['mape'],
+                    id_master=prediksi_json['id_master']
                 )
                 db.session.add(hasil_prediksi_obj)
                 db.session.commit()

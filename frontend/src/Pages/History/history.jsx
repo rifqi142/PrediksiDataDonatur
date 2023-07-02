@@ -78,7 +78,7 @@ export default function History() {
           </Card.Header>
           <Card.Body>
             <Card.Text>
-              Riwayat pemrosesan data donatur menggunakan metode LSTM
+              Riwayat pemrosesan data donatur menggunakan metode Random Forest
             </Card.Text>
           </Card.Body>
         </Card>

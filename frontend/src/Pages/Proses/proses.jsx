@@ -44,11 +44,13 @@ export default function Proses() {
       <Sidebar />
       <div className="right-content">
         <Card border="info" className="mt-3 mx-3">
-          <Card.Header className="card-header">Hasil Prediksi</Card.Header>
+          <Card.Header className="card-header">
+            Proses Data Menggunakan Metode Random Forest
+          </Card.Header>
           <Card.Body>
             <Card.Text>
-              Hasil prediksi data donatur menggunakan metode Random Forest
-              Regression
+              Proses data menggunakan Metode Random Forest, Silahkan lengkapi
+              form dibawah ini :
             </Card.Text>
           </Card.Body>
         </Card>
