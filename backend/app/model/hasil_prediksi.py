@@ -7,8 +7,6 @@ class Hasil_prediksi(db.Model):
     bulan = db.Column(db.BigInteger)
     jenis_donasi = db.Column(db.String(255))
     prediksi = db.Column(db.BigInteger, nullable=False)
-    ekspektasi = db.Column(db.BigInteger, nullable=False)
-    mape = db.Column(db.BigInteger, nullable=False)
     
     def __repr__(self):
         return '<Hasil_prediksi {}>'.format(self.name)

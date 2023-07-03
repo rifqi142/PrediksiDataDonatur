@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Sidebar from "../../Components/sidebar/sidebar";
 import { Card, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import "./proses.css";
 
 export default function Proses() {
+  const userTahun = useRef();
+  const userBulan = useRef();
+  const userJenis = useRef();
+
+  const [tahun, setTahun] = useState("");
+  const [bulan, setBulan] = useState("");
+  const [jenis, setJenis] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
 
   const [data, setData] = useState([]);
@@ -20,7 +27,12 @@ export default function Proses() {
     try {
       const res = await axios.post(
         `/proses-predict`,
-        { pilihan: selectedValue },
+        {
+          tahun: tahun,
+          bulan: bulan,
+          jenis: jenis,
+          pilihan: selectedValue,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -57,13 +69,60 @@ export default function Proses() {
         <div className="prediction mt-3 mx-3">
           <Card>
             <Card.Body>
-              <Card.Text>Pilih data yang ingin di prediksi</Card.Text>
+              <Card.Text>
+                Lengkapi form dibawah ini untuk melakukan prediksi :
+              </Card.Text>
               <Form>
-                <Form.Select value={selectedValue} onChange={handleChange}>
-                  <option>Pilih Data</option>
-                  <option value="1">Jumlah Donasi</option>
-                  <option value="2">Jumlah Data</option>
-                </Form.Select>
+                <Form.Group className="mb-3" controlId="formBasicTahun">
+                  <Form.Label>Masukan Tahun</Form.Label>
+                  <input
+                    placeholder="Masukan Tahun ex: 2021"
+                    type="number"
+                    className="form-control"
+                    id="tahun"
+                    name="tahun"
+                    ref={userTahun}
+                    onChange={(e) => setTahun(e.target.value)}
+                    value={tahun}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicBulan">
+                  <Form.Label>Masukan Bulan</Form.Label>
+                  <input
+                    placeholder="Masukan Bulan ex: 1"
+                    type="number"
+                    className="form-control"
+                    id="bulan"
+                    name="bulan"
+                    ref={userBulan}
+                    onChange={(e) => setBulan(e.target.value)}
+                    value={bulan}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicJenis">
+                  <Form.Label>Masukan Jenis Donasi</Form.Label>
+                  <input
+                    placeholder="Masukan Bulan ex: ZAKAT"
+                    type="text"
+                    className="form-control"
+                    id="jenis"
+                    name="jenis"
+                    ref={userJenis}
+                    onChange={(e) => setJenis(e.target.value)}
+                    value={jenis}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicSelect">
+                  <Form.Label>Pilih yang ingin di prediksi</Form.Label>
+                  <Form.Select value={selectedValue} onChange={handleChange}>
+                    <option>Pilih Data</option>
+                    <option value="1">Jumlah Donasi</option>
+                    <option value="2">Jumlah Data</option>
+                  </Form.Select>
+                </Form.Group>
               </Form>
               <Button
                 variant="primary"

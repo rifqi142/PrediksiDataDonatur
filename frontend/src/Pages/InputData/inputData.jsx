@@ -122,7 +122,7 @@ function InputData() {
         <Card className="card-content">
           <Card.Body>
             <Form id="form" onSubmit={handleSubmit}>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Group className="mb-3" controlId="formBasicDataset">
                 <Form.Label>Judul Dataset</Form.Label>
                 <input
                   placeholder="Masukan Judul Dataset"
@@ -190,7 +190,12 @@ function InputData() {
                           <td>{item.tahun}</td>
                           <td>{item.bulan}</td>
                           <td>{item.jenis_donasi}</td>
-                          <td>{item.jumlah_donasi}</td>
+                          <td>
+                            {item.jumlah_donasi.toLocaleString("id", {
+                              style: "currency",
+                              currency: "IDR",
+                            })}
+                          </td>
                           <td>{item.jumlah_data}</td>
                         </tr>
                       ))}

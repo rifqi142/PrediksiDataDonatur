@@ -1,17 +1,87 @@
-import pandas as pd
-from sklearn.metrics import mean_absolute_percentage_error
-import numpy as np
-from sklearn.ensemble import RandomForestRegressor
-
-from app.model.master import Master
 from app.model.hasil_prediksi import Hasil_prediksi
 from app.model.dataset import Dataset
+from app.model.master import Master
 from app import response, db
 from flask import request
 from sqlalchemy import desc
-from sklearn.preprocessing import OneHotEncoder
-import json
+import pickle
+from typing import List
 
+# Load trained model
+model = pickle.load(open('app/model/random_forest_jumdonasi.pkl', 'rb'))
+model2 = pickle.load(open('app/model/random_forest_jumdata.pkl', 'rb'))
+
+# Define boilerplate result endpoint
+response_boilerplate = {"status_code" : 200, "message" : "success", "data" : []}
+
+# Define LabelEncoder index of "Jenis" column transformed
+class_to_index = {
+    'CILKUR': 0,
+    'INFAK': 1,
+    'INFAK TEMATIK': 2,
+    'INFAK TERIKAT': 3,
+    'KEMANUSIAAN': 4,
+    'KURBAN': 5,
+    'LAIN-LAIN': 6,
+    'NON HALAL': 7,
+    'WAKAF': 8,
+    'ZAKAT': 9
+    }
+## Proses prediksi Jumlah Donasi
+class ParamFeature:
+    def __init__(self, tahun: any, bulan: any, jenis: any) -> None:
+        self.tahun = tahun 
+        self.bulan = bulan 
+        self.jenis = jenis
+
+    def logger(self, value: any, lower_bound: any, upper_boung: any) -> None:
+        print(f"{value} value should in interval of {lower_bound} and {upper_boung}, if not satisfied model might predict from outlier condition")
+    
+    def fix_tahun(self, tahun: any) -> int:
+        lower, upper = 2018, 2021
+        if isinstance(tahun, str):
+            tahun = int(tahun)
+        if tahun not in range(lower, upper + 1):
+            self.logger(tahun, lower, upper)
+        return tahun
+
+    def fix_bulan(self, bulan: any) -> int:
+        lower, upper = 1, 12
+        if isinstance(bulan, str):
+            bulan = int(bulan)
+        if bulan not in range(lower, upper + 1):
+            self.logger(bulan, lower, upper)
+        return bulan
+    
+    def fix_jenis(self, jenis: any) -> int:
+        outlier_value = 0
+        if jenis in class_to_index.keys():
+            return class_to_index[jenis]
+        else:
+            return outlier_value
+        
+    def validate(self) -> List:
+        tahun = self.fix_tahun(self.tahun)
+        bulan = self.fix_bulan(self.bulan)
+        jenis = self.fix_jenis(self.jenis)
+        param_input = [tahun, bulan, jenis]
+        return param_input
+
+def perform_prediction(tahun: str, bulan: str, jenis: str) -> float:
+    feature_raw = ParamFeature(tahun, bulan, jenis)
+    feature = feature_raw.validate()
+    result = model.predict([feature])
+    result = result[0]
+    return result
+
+def perform_prediction2(tahun: str, bulan: str, jenis: str) -> float:
+    feature_raw = ParamFeature(tahun, bulan, jenis)
+    feature = feature_raw.validate()
+    result = model2.predict([feature])
+    result = result[0]
+    return result
+
+# get data from database
 def formatArray(data):
     array = []
     
@@ -37,119 +107,40 @@ def proses_predict():
         dataset = Dataset.query.order_by(Dataset.id.desc()).limit(1).all()  # mendapatkan data terakhir
         datalast = Dataset.query.filter_by(id_master=dataset[0].id_master).all()  # mendapatkan data terakhir berdasarkan id_master
         data = formatArray(datalast)
+        # print(data)
         # data sudah aman
         if not data:
             return response.badRequest([], 'Data tidak ditemukan')
-
-        # Mendapatkan id_master
-        # aman
+        # get id master
         master = Master.query.order_by(Master.id.desc()).limit(1).first()
-        print(master.id)
 
+        param_tahun = request.json.get("tahun")
+        param_bulan = request.json.get("bulan")
+        param_jenis = request.json.get("jenis")
         # selection aman
         dataSelect = request.get_json()
         pilihan = dataSelect.get('pilihan')
         print(pilihan)
         # Jika value 1 maka proses prediksi jumlah donasi
         if pilihan == '1':
-            # Melakukan one-hot encoding pada kolom "Jenis"
-            dataset_encoded = pd.get_dummies(dataset, columns=['Jenis'])
-            print(dataset_encoded)
-            
-            # Memisahkan fitur dan target
-            X = dataset_encoded.drop(['tahun', 'bulan', 'jumlah_donasi'], axis=1)
-            y = dataset_encoded['jumlah_donasi']
-
-            # Membagi data menjadi data training dan data testing
-            train_size = int(len(dataset_encoded) * 0.8)
-            X_train, X_test = X[:train_size], X[train_size:]
-            y_train, y_test = y[:train_size], y[train_size:]
-
-            # Membuat model random forest
-            model = RandomForestRegressor()
-            model.fit(X_train, y_train)
-
-            # Melakukan prediksi pada data uji
-            y_pred = model.predict(X_test)
-
-            # Menghitung nilai MAPE
-            mape = mean_absolute_percentage_error(y_test, y_pred)
-            hasil_prediksi = []
-
-            for i in range(train_size, len(dataset_encoded)):
-                prediksi = {
-                    'tahun': dataset_encoded.iloc[i]['tahun'],
-                    'bulan': dataset_encoded.iloc[i]['bulan'],
-                    'jenis_donasi': dataset_encoded.iloc[i]['jenis_donasi'],
-                    'prediksi': y_pred[i - train_size],
-                    'ekspektasi': y_test[i - train_size],
-                    'mape': mape,
-                    'id_master': master.id
-                }
-                hasil_prediksi.append(prediksi)
-
-            prediksi_json = json.dumps(prediksi)
-
-            for prediksi in hasil_prediksi:
-                hasil_prediksi_obj = Hasil_prediksi(
-                    tahun=prediksi_json['tahun'],
-                    bulan=prediksi_json['bulan'],
-                    jenis_donasi=prediksi_json['jenis_donasi'],
-                    prediksi_donasi=prediksi_json['prediksi'],
-                    ekspektasi_donasi=prediksi_json['ekspektasi'],
-                    mape=prediksi_json['mape'],
-                    id_master=prediksi_json['id_master']
-                )
-                db.session.add(hasil_prediksi_obj)
-                db.session.commit()
-
-            return response.success('', 'Berhasil memproses data')
-        else:
-            # Jika value 2 maka proses prediksi jumlah data
-            # Melakukan one-hot encoding pada kolom "jenis_donasi"
-            dataset_encoded = pd.get_dummies(data, columns=['jenis_donasi'])
-
-            # Memisahkan fitur dan target
-            X = dataset_encoded.drop(['tahun', 'bulan', 'jumlah_data'], axis=1)
-            y = dataset_encoded['jumlah_data']
-
-            # Memisahkan data menjadi data training dan data testing
-            train_size = int(len(dataset_encoded) * 0.8)
-            X_train, X_test = X[:train_size], X[train_size:]
-            y_train, y_test = y[:train_size], y[train_size:]
-
-            # Membuat model random forest
-            model = RandomForestRegressor()
-            model.fit(X_train, y_train)
-
-            # Melakukan prediksi pada data uji
-            y_pred = model.predict(X_test)
-
-            # Menghitung nilai MAPE
-            mape = mean_absolute_percentage_error(y_test, y_pred)
-
-            hasil_prediksi = pd.DataFrame({
-                'tahun': data['tahun'].iloc[train_size:],
-                'bulan': data['bulan'].iloc[train_size:],
-                'jenis_donasi': data['jenis_donasi'].iloc[train_size:],
-                'prediksi': y_pred,
-                'ekspektasi': y_test,
-                'mape': mape
-            })
-
-            for _, row in hasil_prediksi.iterrows():
-                db.session.add(Hasil_prediksi(
-                    tahun=row.tahun,
-                    bulan=row.bulan,
-                    jenis_donasi=row.jenis_donasi,
-                    prediksi_donasi=row.prediksi,
-                    ekspektasi_donasi=row.ekspektasi,
-                    mape=row.mape,
-                    id_master=master.id
-                ))
+            result_score_donasi = perform_prediction(
+            param_tahun, param_bulan, param_jenis
+            )
+            # simpan hasil prediksi ke database
+            hasil_prediksi = Hasil_prediksi(tahun=param_tahun, bulan=param_bulan, jenis_donasi=param_jenis, prediksi=result_score_donasi, id_master=master.id)
+            db.session.add(hasil_prediksi)
             db.session.commit()
-
-            return response.success('', 'Berhasil memproses data')
+            response_boilerplate["data donasi"] = [result_score_donasi]
+            return response_boilerplate
+        else:
+            result_score_data = perform_prediction2(
+            param_tahun, param_bulan, param_jenis
+            )
+            hasil_prediksi = Hasil_prediksi(tahun=param_tahun, bulan=param_bulan, jenis_donasi=param_jenis, prediksi=result_score_data, id_master=master.id)
+            db.session.add(hasil_prediksi)
+            db.session.commit()
+            response_boilerplate["data jumdata"] = [result_score_data]
+            return response_boilerplate
     except Exception as e:
         print(e)
         return response.badRequest([], 'Internal server error: ' + str(e))
