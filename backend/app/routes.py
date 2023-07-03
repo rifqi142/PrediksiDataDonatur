@@ -61,4 +61,9 @@ def proses_predict():
 def get_predict(id):
     return dataController.get_hasil_id(id)
 
+# get data hasil prediksi by id untuk hasil proses prediksi
+@app.route('/get-last-hasil', methods=['GET'])
+def get_last_hasil():
+    return dataController.get_last_hasil()
+
 

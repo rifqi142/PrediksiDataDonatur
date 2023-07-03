@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Sidebar from "../../Components/sidebar/sidebar";
 import { Card, Form, Button } from "react-bootstrap";
 import axios from "axios";
@@ -15,12 +15,15 @@ export default function Proses() {
   const [selectedValue, setSelectedValue] = useState("");
 
   const [data, setData] = useState([]);
+  const [dataHasil, setDataHasil] = useState([]);
 
+  // selection change
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
     console.log(selectedValue);
   };
 
+  // proses prediksi
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(selectedValue);
@@ -43,6 +46,7 @@ export default function Proses() {
       console.log(res.data.data);
       setData(res.data.data);
       if (res.status === 200) {
+        window.location.reload();
         console.log("Data successfully submitted", res.data);
       }
     } catch (error) {
@@ -50,12 +54,24 @@ export default function Proses() {
       console.log(data);
     }
   };
-
+  // Mendapatkan data hasil prediksi paling akhir
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/get-last-hasil");
+        console.log(res.data.data);
+        setDataHasil(res.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
   return (
     <section id="proses-pages">
       <Sidebar />
       <div className="right-content">
-        <Card border="info" className="mt-3 mx-3">
+        {/* <Card border="info" className="mt-3 mx-3">
           <Card.Header className="card-header">
             Proses Data Menggunakan Metode Random Forest
           </Card.Header>
@@ -65,7 +81,7 @@ export default function Proses() {
               form dibawah ini :
             </Card.Text>
           </Card.Body>
-        </Card>
+        </Card> */}
         <div className="prediction mt-3 mx-3">
           <Card>
             <Card.Body>
@@ -90,7 +106,7 @@ export default function Proses() {
                 <Form.Group className="mb-3" controlId="formBasicBulan">
                   <Form.Label>Masukan Bulan</Form.Label>
                   <input
-                    placeholder="Masukan Bulan ex: 1"
+                    placeholder="Masukan Bulan ex: 1-12"
                     type="number"
                     className="form-control"
                     id="bulan"
@@ -104,7 +120,7 @@ export default function Proses() {
                 <Form.Group className="mb-3" controlId="formBasicJenis">
                   <Form.Label>Masukan Jenis Donasi</Form.Label>
                   <input
-                    placeholder="Masukan Bulan ex: ZAKAT"
+                    placeholder="Masukan Bulan ex: ZAKAT, INFAK, KURBAN, WAKAF, KEMANUSIAAN, DLL"
                     type="text"
                     className="form-control"
                     id="jenis"
@@ -131,6 +147,29 @@ export default function Proses() {
               >
                 Prediksi
               </Button>
+            </Card.Body>
+          </Card>
+          <Card className="mt-2">
+            <Card.Body>
+              <Card.Text>
+                {dataHasil.length > 0 ? (
+                  <>
+                    {dataHasil[0].jenis_prediksi === "jumDonasi" ? (
+                      <>
+                        Jumlah Donasi Sebesar:{" "}
+                        {dataHasil[0].hasil_prediksi.toLocaleString("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                        })}
+                      </>
+                    ) : (
+                      <>Jumlah Data Sebanyak: {dataHasil[0].hasil_prediksi}</>
+                    )}
+                  </>
+                ) : (
+                  "Loading..."
+                )}
+              </Card.Text>
             </Card.Body>
           </Card>
         </div>

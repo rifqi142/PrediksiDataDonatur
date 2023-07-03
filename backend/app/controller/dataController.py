@@ -140,4 +140,14 @@ def delete_data(id):
         print(e)
         return response.badRequest([], 'Internal server error: ' + str(e))
 
-
+# get data hasil prediksi berdasarkan data terakhir kali di prediksi
+def get_last_hasil():
+    try:
+        last_result = Hasil_prediksi.query.order_by(desc(Hasil_prediksi.id)).limit(1).all()
+        data = formatArrayHasil(last_result)
+        if data is None:
+            return response.badRequest([], 'Data tidak ada')
+        return response.success(data, 'Berhasil mengambil data')
+    except Exception as e:
+        print(e)
+        return response.badRequest([], 'Internal server error: ' + str(e))

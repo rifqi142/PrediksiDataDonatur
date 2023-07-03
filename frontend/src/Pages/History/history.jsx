@@ -145,7 +145,8 @@ export default function History() {
                           >
                             <Modal.Header closeButton>
                               <Modal.Title>
-                                Lihat data {selectedData && selectedData.judul}
+                                Lihat Detail{" "}
+                                {selectedData && selectedData.judul}
                               </Modal.Title>
                             </Modal.Header>
                             <Modal.Body className="modal-body-scroll">
@@ -212,7 +213,10 @@ export default function History() {
                             centered
                           >
                             <Modal.Header closeButton>
-                              <Modal.Title>Hasil Prediksi</Modal.Title>
+                              <Modal.Title>
+                                Hasil Prediksi{" "}
+                                {selectedData && selectedData.judul}
+                              </Modal.Title>
                             </Modal.Header>
                             <Modal.Body className="modal-body-scroll">
                               <Table
