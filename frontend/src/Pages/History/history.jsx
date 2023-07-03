@@ -7,6 +7,8 @@ import "./history.css";
 export default function History() {
   const [data, setData] = useState([]);
   const [newData, setNewData] = useState([]);
+  const [dataHasil, setDataHasil] = useState([]);
+
   const [selectedId, setSelectedId] = useState(null);
   const [selectedData, setSelectedData] = useState(null);
 
@@ -15,12 +17,17 @@ export default function History() {
   const handleCloseDetailModal = () => setShowDetailModal(false);
   const handleShowDetailModal = () => setShowDetailModal(true);
 
+  // Hasil Modal
+  const [showHasilModal, setShowHasilModal] = useState(false);
+  const handleCloseHasilModal = () => setShowHasilModal(false);
+  const handleShowHasilModal = () => setShowHasilModal(true);
+
   // Delete Modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
 
-  // Fetch data
+  // Fetch data master
   useEffect(() => {
     async function fetchData() {
       try {
@@ -34,7 +41,7 @@ export default function History() {
     fetchData();
   }, []);
 
-  // Fetch new data
+  // Mengambil data dari dataset dengan id master terakhir
   useEffect(() => {
     async function fetchNewData() {
       try {
@@ -48,7 +55,21 @@ export default function History() {
     fetchNewData();
   }, [selectedId]);
 
-  // Delete data
+  // Mengambil data dari hasil prediksi dengan id master terakhir
+  useEffect(() => {
+    async function fetchHasilPrediksi() {
+      try {
+        const res = await axios.get(`/get-data-predict/${selectedId}`);
+        console.log(res.data.data);
+        setDataHasil(res.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchHasilPrediksi();
+  }, [selectedId]);
+
+  // Delete data berdasarkan id master
   const handleConfirmDelete = async () => {
     try {
       const res = await axios.delete(`/delete-data/${selectedId}`);
@@ -170,12 +191,69 @@ export default function History() {
                       ) : (
                         <p></p>
                       )}
-                      {master.hasil === 1 ? (
+                      {master.hasil === 0 ? (
                         <p></p>
                       ) : (
-                        <Button variant="success" className="mt-2 ms-2">
-                          Lihat Hasil
-                        </Button>
+                        <>
+                          <Button
+                            variant="success"
+                            className="mt-2 ms-2"
+                            onClick={() => {
+                              setSelectedId(master.id);
+                              handleShowHasilModal();
+                            }}
+                          >
+                            Lihat Hasil
+                          </Button>
+                          <Modal
+                            show={showHasilModal}
+                            onHide={handleCloseHasilModal}
+                            size="xl"
+                            centered
+                          >
+                            <Modal.Header closeButton>
+                              <Modal.Title>Hasil Prediksi</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body className="modal-body-scroll">
+                              <Table
+                                responsive="sm"
+                                id="table"
+                                className="table"
+                              >
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Tahun</th>
+                                    <th>Bulan</th>
+                                    <th>Jenis Donasi</th>
+                                    <th>Jenis Prediksi</th>
+                                    <th>Hasil Prediksi</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {dataHasil.map((item, index) => (
+                                    <tr key={index}>
+                                      <td>{index + 1}</td>
+                                      <td>{item.tahun}</td>
+                                      <td>{item.bulan}</td>
+                                      <td>{item.jenis_donasi}</td>
+                                      <td>{item.jenis_prediksi}</td>
+                                      <td>{item.hasil_prediksi}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </Table>
+                            </Modal.Body>
+                            <Modal.Footer>
+                              <Button
+                                variant="secondary"
+                                onClick={handleCloseHasilModal}
+                              >
+                                Close
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
+                        </>
                       )}
                       <>
                         <Button

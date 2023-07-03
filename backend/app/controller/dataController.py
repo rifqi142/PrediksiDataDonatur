@@ -2,6 +2,7 @@ import io, csv, os, uuid
 import datetime as dt
 from app.model.dataset import Dataset
 from app.model.master import Master
+from app.model.hasil_prediksi import Hasil_prediksi
 from app import response, db
 from flask import request
 from sqlalchemy import desc
@@ -34,17 +35,7 @@ def add_data():
         print(e)
         return response.badRequest([], 'Internal server error: ' + str(e))
 
-def get_data():
-    try:
-        dataset = Dataset.query.all()
-        data = formatArray(dataset)
-        if not data:
-            return response.badRequest([], 'Data tidak ditemukan')
-        
-        return response.success(data, 'Berhasil mengambil data')
-    except Exception as e:
-        print(e)
-
+# untuk mendapatkan dataset yang sudah di upload
 def formatArray(data):
     array = []
     
@@ -77,6 +68,39 @@ def get_data_id(id):
     except Exception as e:
         print(e)
 
+# untuk mendapatkan hasil prediksi dari database
+def formatArrayHasil(data):
+    array = []
+    
+    for i in data:
+        array.append(singleTransformHasil(i))
+    
+    return array
+
+def singleTransformHasil(data):
+    data = {
+        'tahun': data.tahun,
+        'bulan': data.bulan,
+        'jenis_donasi': data.jenis_donasi,
+        'jenis_prediksi': data.jenis_prediksi,
+        'hasil_prediksi': data.hasil_prediksi,
+        'id_master': data.id_master,
+    }
+    return data
+# get data hasil prediksi by id untuk history pages
+def get_hasil_id(id):
+    try:
+        hasil = Hasil_prediksi.query.filter_by(id_master=id).all()
+        data = formatArrayHasil(hasil)
+        
+        if not data:
+            return response.badRequest([], 'Data tidak ditemukan')
+        
+        return response.success(data, 'Berhasil mengambil data')
+    except Exception as e:
+        print(e)
+
+        
 # get data by id untuk input pages
 def get_last_data():
     try:
@@ -92,25 +116,28 @@ def get_last_data():
         print(e)
         return response.badRequest([], 'Internal server error: ' + str(e))
 
-# hapus data by id untuk history pages
+
 def delete_data(id):
     try:
-        dataset = Dataset.query.filter_by(id_master=id).first()
         master = Master.query.filter_by(id=id).first()
 
-        if dataset is None and master is None:
+        if master is None:
             return response.badRequest([], 'Data tidak ada')
 
-        if dataset is not None:
+        datasets = Dataset.query.filter_by(id_master=master.id).all()
+        for dataset in datasets:
             db.session.delete(dataset)
 
-        if master is not None:
-            db.session.delete(master)
+        hasils = Hasil_prediksi.query.filter_by(id_master=master.id).all()
+        for hasil in hasils:
+            db.session.delete(hasil)
 
+        db.session.delete(master)
         db.session.commit()
 
         return response.success('', 'Berhasil menghapus data')
     except Exception as e:
         print(e)
         return response.badRequest([], 'Internal server error: ' + str(e))
+
 

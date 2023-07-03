@@ -119,8 +119,8 @@ export default function Proses() {
                   <Form.Label>Pilih yang ingin di prediksi</Form.Label>
                   <Form.Select value={selectedValue} onChange={handleChange}>
                     <option>Pilih Data</option>
-                    <option value="1">Jumlah Donasi</option>
-                    <option value="2">Jumlah Data</option>
+                    <option value="jumDonasi">Jumlah Donasi</option>
+                    <option value="jumData">Jumlah Data</option>
                   </Form.Select>
                 </Form.Group>
               </Form>

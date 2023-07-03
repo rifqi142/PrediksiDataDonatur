@@ -85,6 +85,7 @@ function InputData() {
         setJudul("");
         console.log(response.data);
         if (response.status === 200) {
+          window.location.reload();
           console.log("Data successfully submitted", response.data);
         }
       } catch (error) {

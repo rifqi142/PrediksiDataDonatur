@@ -6,7 +6,8 @@ class Hasil_prediksi(db.Model):
     tahun = db.Column(db.BigInteger)
     bulan = db.Column(db.BigInteger)
     jenis_donasi = db.Column(db.String(255))
-    prediksi = db.Column(db.BigInteger, nullable=False)
+    jenis_prediksi = db.Column(db.String(255))
+    hasil_prediksi = db.Column(db.BigInteger, nullable=False)
     
     def __repr__(self):
         return '<Hasil_prediksi {}>'.format(self.name)

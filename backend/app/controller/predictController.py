@@ -101,6 +101,7 @@ def singleTransform(data):
     }
     return data
 
+
 def proses_predict():
     try:
         # Mendapatkan data terakhir
@@ -122,12 +123,17 @@ def proses_predict():
         pilihan = dataSelect.get('pilihan')
         print(pilihan)
         # Jika value 1 maka proses prediksi jumlah donasi
-        if pilihan == '1':
+        if pilihan == 'jumDonasi':
             result_score_donasi = perform_prediction(
             param_tahun, param_bulan, param_jenis
             )
-            # simpan hasil prediksi ke database
-            hasil_prediksi = Hasil_prediksi(tahun=param_tahun, bulan=param_bulan, jenis_donasi=param_jenis, prediksi=result_score_donasi, id_master=master.id)
+            # # mengganti hasil menjadi true dikarenakan data sudah ada
+            master.hasil = True
+            db.session.add(master)
+            db.session.commit()
+
+            # simpan hasil prediksi jumDonasi ke database
+            hasil_prediksi = Hasil_prediksi(tahun=param_tahun, bulan=param_bulan, jenis_donasi=param_jenis, jenis_prediksi=pilihan ,hasil_prediksi=result_score_donasi, id_master=master.id)
             db.session.add(hasil_prediksi)
             db.session.commit()
             response_boilerplate["data donasi"] = [result_score_donasi]
@@ -136,7 +142,13 @@ def proses_predict():
             result_score_data = perform_prediction2(
             param_tahun, param_bulan, param_jenis
             )
-            hasil_prediksi = Hasil_prediksi(tahun=param_tahun, bulan=param_bulan, jenis_donasi=param_jenis, prediksi=result_score_data, id_master=master.id)
+            
+            master.hasil = True
+            db.session.add(master)
+            db.session.commit()
+            
+            # simpan hasil prediksi jumDatake database
+            hasil_prediksi = Hasil_prediksi(tahun=param_tahun, bulan=param_bulan, jenis_donasi=param_jenis, jenis_prediksi=pilihan, hasil_prediksi=result_score_data, id_master=master.id)
             db.session.add(hasil_prediksi)
             db.session.commit()
             response_boilerplate["data jumdata"] = [result_score_data]
