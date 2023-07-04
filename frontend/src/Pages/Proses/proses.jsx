@@ -156,14 +156,25 @@ export default function Proses() {
                   <>
                     {dataHasil[0].jenis_prediksi === "jumDonasi" ? (
                       <>
-                        Jumlah Donasi Sebesar:{" "}
-                        {dataHasil[0].hasil_prediksi.toLocaleString("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                        })}
+                        Jumlah Besaran Prediksi Donasi dari tahun{" "}
+                        {dataHasil[0].tahun} bulan {dataHasil[0].bulan} jenis{" "}
+                        {dataHasil[0].jenis_donasi} Sebesar :{" "}
+                        <Card.Text>
+                          {dataHasil[0].hasil_prediksi.toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                          })}
+                        </Card.Text>
                       </>
                     ) : (
-                      <>Jumlah Data Sebanyak: {dataHasil[0].hasil_prediksi}</>
+                      <>
+                        Jumlah Data Prediksi dari tahun {dataHasil[0].tahun}{" "}
+                        bulan {dataHasil[0].bulan} jenis{" "}
+                        {dataHasil[0].jenis_donasi} Sebanyak :{" "}
+                        <Card.Text>
+                          {dataHasil[0].hasil_prediksi} data
+                        </Card.Text>
+                      </>
                     )}
                   </>
                 ) : (
