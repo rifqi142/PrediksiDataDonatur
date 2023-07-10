@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../Components/sidebar/sidebar";
-import { Card } from "react-bootstrap";
+import { Card, Accordion, Table } from "react-bootstrap";
 import { registerables } from "chart.js";
 import Chart from "chart.js/auto";
 import "./grafik.css";
@@ -8,6 +8,7 @@ import axios from "axios";
 
 export default function Grafik() {
   const [chartData, setChartData] = useState({});
+  const [chartData2, setChartData2] = useState({});
 
   // chart 1
   useEffect(() => {
@@ -40,21 +41,6 @@ export default function Grafik() {
     }
 
     Chart.register(...registerables);
-
-    // const monthNames = [
-    //   "Januari",
-    //   "Februari",
-    //   "Maret",
-    //   "April",
-    //   "Mei",
-    //   "Juni",
-    //   "Juli",
-    //   "Agustus",
-    //   "September",
-    //   "Oktober",
-    //   "November",
-    //   "Desember",
-    // ];
 
     new Chart(ctx, {
       type: "bar",
@@ -109,6 +95,84 @@ export default function Grafik() {
     });
   };
 
+  // chart 2
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/get-chart-data");
+        setChartData2(res.data);
+        createChart2(res.data);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const createChart2 = (data) => {
+    const ctx = document.getElementById("myChart2").getContext("2d");
+
+    // Hancurkan chart sebelumnya (jika ada)
+    const previousChart = Chart.getChart("myChart2");
+    if (previousChart) {
+      previousChart.destroy();
+    }
+
+    Chart.register(...registerables);
+
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Data Aktual",
+            data: data.expectations,
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+          {
+            label: "Data Prediksi",
+            data: data.predictions,
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "top",
+          },
+          title: {
+            display: true,
+            text: "Perbandingan Jumlah Data",
+          },
+        },
+        scales: {
+          x: {
+            display: true,
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: "Jumlah Data",
+            },
+            ticks: {
+              beginAtZero: true,
+            },
+            suggestedMax: Math.max(...data.expectations, ...data.predictions),
+          },
+        },
+      },
+    });
+  };
   return (
     <>
       <section id="grafik-pages">
@@ -121,8 +185,67 @@ export default function Grafik() {
           </Card>
 
           <div className="chart">
-            <canvas id="myChart" width="800" height="400"></canvas>
-            {/* <canvas id="myChart2"></canvas> */}
+            <Accordion defaultActiveKey="0">
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>
+                  Lihat Grafik Perbandingan Jumlah Donasi
+                </Accordion.Header>
+                <Accordion.Body>
+                  <canvas id="myChart" width="800" height="400"></canvas>
+                </Accordion.Body>
+                <Accordion.Body>
+                  <Table responsive="sm" id="table" className="table">
+                    <thead>
+                      <tr>
+                        <th>MAE</th>
+                        <th>MSE</th>
+                        <th>MAPE</th>
+                        <th>RMSE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>2377147764.88</td>
+                        <td>29403585</td>
+                        <td>5,4222</td>
+                        <td>63.63%</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+
+            <Accordion defaultActiveKey="0">
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>
+                  Lihat Grafik Perbandingan Jumlah Data
+                </Accordion.Header>
+                <Accordion.Body>
+                  <canvas id="myChart2" width="800" height="400"></canvas>
+                </Accordion.Body>
+                <Accordion.Body>
+                  <Table responsive="sm" id="table" className="table">
+                    <thead>
+                      <tr>
+                        <th>MAE</th>
+                        <th>MSE</th>
+                        <th>MAPE</th>
+                        <th>RMSE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>2528.55</td>
+                        <td>19217924.51</td>
+                        <td>4,384</td>
+                        <td>31.33%</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
           </div>
         </div>
       </section>
