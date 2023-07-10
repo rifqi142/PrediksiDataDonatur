@@ -2,10 +2,12 @@ from app.model.hasil_prediksi import Hasil_prediksi
 from app.model.dataset import Dataset
 from app.model.master import Master
 from app import response, db
-from flask import request
+from flask import request, jsonify
 from sqlalchemy import desc
 import pickle
 from typing import List
+import pandas as pd
+
 
 # Load trained model
 model = pickle.load(open('app/model/random_forest_jumdonasi.pkl', 'rb'))
@@ -81,7 +83,7 @@ def perform_prediction2(tahun: str, bulan: str, jenis: str) -> float:
     result = result[0]
     return result
 
-# get data from database
+# get dataf format from database
 def formatArray(data):
     array = []
     
@@ -156,3 +158,31 @@ def proses_predict():
     except Exception as e:
         print(e)
         return response.badRequest([], 'Internal server error: ' + str(e))
+
+# membuat chart yang akan digunakan pada frontend
+def get_chart_data():
+    data = pd.read_excel('D:/Documents/Folder-Kiki/Tugas Akhir/PrediksiDataDonatur/backend/dataset/prediksiJumDonasi.xlsx')
+    
+    chart_data = data[['Prediksi_Donasi', 'Ekspetasi_Donasi']]
+    
+    predictions = chart_data['Prediksi_Donasi'].tolist()
+    expectations = chart_data['Ekspetasi_Donasi'].tolist()
+    
+    labels = [f'{pred} / {exp}' for pred, exp in zip(predictions, expectations)]
+    
+    return jsonify({'labels': labels, 'predictions': predictions, 'expectations': expectations})
+
+
+def get_chart_data2():
+    # baca file excel menggunakan pandas
+    data = pd.read_excel('D:/Documents/Folder-Kiki/Tugas Akhir/PrediksiDataDonatur/backend/dataset/prediksiJumData.xlsx')
+    
+    # ambil kolom yang akan digunakan
+    chart_data = data[['Prediksi_Donasi', 'Ekspetasi_Donasi']]
+    
+    # ubah data menjadi format yang dapat digunakan oleh chart.js
+    predictions = chart_data['Prediksi_Donasi'].tolist()
+    expectations = chart_data['Ekspetasi_Donasi'].tolist()
+    
+    # kirim data sebagai JSON
+    return jsonify({'predictions': predictions, 'expectations': expectations})

@@ -72,16 +72,17 @@ const Sidebar = () => {
                   Proses Data
                 </CDBSidebarMenuItem>
               </NavLink>
+              <NavLink exact to="/grafik">
+                <CDBSidebarMenuItem icon="chart-line">
+                  Lihat Grafik
+                </CDBSidebarMenuItem>
+              </NavLink>
               <NavLink exact to="/history">
                 <CDBSidebarMenuItem icon="history">history</CDBSidebarMenuItem>
               </NavLink>
               <NavLink exact to="/about">
                 <CDBSidebarMenuItem icon="user">About</CDBSidebarMenuItem>
               </NavLink>
-              {/* <Button variant="primary" onClick={toggleLogoutModal}>
-                <SlLogout />
-                &nbsp;&nbsp;&nbsp;Logout
-              </Button> */}
               <NavLink exact to="#" onClick={toggleLogoutModal}>
                 <CDBSidebarMenuItem>
                   <SlLogout />

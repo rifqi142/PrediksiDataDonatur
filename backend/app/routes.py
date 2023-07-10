@@ -66,4 +66,13 @@ def get_predict(id):
 def get_last_hasil():
     return dataController.get_last_hasil()
 
+# mengirim data chart ke frontend jumdonasi
+@app.route('/get-chart-donasi', methods=['GET'])
+def get_chart_jumDonasi():
+    return predictController.get_chart_data()
+
+# mengirim data chart ke frontend jumdata
+@app.route('/get-chart-data', methods=['GET'])
+def get_chart_jumData():
+    return predictController.get_chart_data2()
 

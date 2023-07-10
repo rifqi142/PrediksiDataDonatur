@@ -276,10 +276,10 @@ export default function History() {
                           centered
                         >
                           <Modal.Header closeButton>
-                            <Modal.Title>Confirm Delete</Modal.Title>
+                            <Modal.Title>Kormasi Delete</Modal.Title>
                           </Modal.Header>
                           <Modal.Body>
-                            Are you sure you want to delete the data?
+                            Apakah anda yakin ingin menghapus data?
                           </Modal.Body>
                           <Modal.Footer>
                             <Button

@@ -8,6 +8,7 @@ import {
   Proses,
   About,
   History,
+  Grafik,
 } from "./Pages";
 
 import PrivateRoutes from "./Routes/PrivateRoutes";
@@ -20,6 +21,7 @@ export default function App() {
       <Route path="/home" element={<Home />}></Route>
       <Route path="/input-data" element={<InputData />}></Route>
       <Route path="/proses-data" element={<Proses />}></Route>
+      <Route path="/grafik" element={<Grafik />}></Route>
       <Route path="/about" element={<About />}></Route>
       <Route path="/history" element={<History />}></Route>
       <Route path="" element={<PrivateRoutes />}></Route>
