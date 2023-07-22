@@ -180,7 +180,7 @@ export default function Grafik() {
         <div className="right-content">
           <Card border="info">
             <Card.Header>
-              Lihat Grafik dari Model yang sudah diproses
+              Lihat Grafik dari Data yang sudah diproses
             </Card.Header>
           </Card>
 

@@ -120,7 +120,7 @@ export default function Proses() {
                 <Form.Group className="mb-3" controlId="formBasicJenis">
                   <Form.Label>Masukan Jenis Donasi</Form.Label>
                   <input
-                    placeholder="Masukan Bulan ex: ZAKAT, INFAK, KURBAN, WAKAF, KEMANUSIAAN, DLL"
+                    placeholder="ex Jenis: CILKUR, INFAK, INFAK TEMATIK, INFAK TERIKAT, KEMANUSIAAN, KURBAN, LAIN-LAIN, NON HALAL, WAKAF, ZAKAT"
                     type="text"
                     className="form-control"
                     id="jenis"
@@ -178,7 +178,7 @@ export default function Proses() {
                     )}
                   </>
                 ) : (
-                  "Loading..."
+                  "Tidak ada riwayat prediksi..."
                 )}
               </Card.Text>
             </Card.Body>

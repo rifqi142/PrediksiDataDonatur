@@ -147,7 +147,7 @@ function InputData() {
                   className="form-control"
                   type="file"
                   id="file"
-                  // accept=".csv"
+                  accept=".csv"
                   onChange={handleFile}
                   required
                 ></input>
